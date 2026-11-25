@@ -1,0 +1,12 @@
+/data/raw/*
+!/data/raw/.gitkeep
+/models/*.joblib
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.DS_Store
+.env

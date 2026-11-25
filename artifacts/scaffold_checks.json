@@ -1,0 +1,12 @@
+{
+  "ruff": {
+    "command": ".venv/bin/ruff check .",
+    "exit_code": 0,
+    "output": "All checks passed!\n"
+  },
+  "pytest": {
+    "command": ".venv/bin/pytest -q",
+    "exit_code": 5,
+    "output": "\nno tests ran in 0.00s\n"
+  }
+}
