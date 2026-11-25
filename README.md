@@ -4,8 +4,8 @@ Experimental decision support for estimating telemedicine request urgency.
 
 **Experimental output. Not a clinical decision.**
 
-Data ingestion, profiling, cleaning, integration, and deterministic feature engineering
-are implemented. Statistical hypothesis tests, model training, evaluation,
+Data ingestion, profiling, cleaning, integration, deterministic feature engineering,
+and exploratory analysis are implemented. Statistical hypothesis tests, model training, evaluation,
 explainability, and dashboard views are not implemented.
 
 ## Setup
@@ -77,3 +77,20 @@ intake history, including unlabelled requests, and exclude simultaneous requests
 
 No data splitting, imputation, scaling, resampling, or learned encoding occurs here.
 Fit those steps on training data only inside the later modelling pipeline.
+
+## Exploratory analysis
+
+Run `python -m src.eda` or execute `notebooks/02_exploratory_data_analysis.ipynb`
+with the repository root as the kernel working directory. The workflow loads the
+prepared labelled cohort, generating preparation outputs first if absent.
+`src/eda.py` owns EDA aggregation and reporting; reusable Plotly presentation
+helpers live in `dashboard/utils/visualization.py` for dashboard reuse.
+
+Open `artifacts/eda/index.html` to browse interactive figures offline. Keep the
+directory together with its shared local Plotly bundle. Key figures also have PNG
+exports through pinned Kaleido. CSV tables preserve plotted counts, within-category
+fractions, distribution summaries, correlations, and pairwise observation counts.
+`summary.json` backs the written `analytical_patterns.md` section displayed at the
+end of the notebook. All observations are descriptive; repeated patients, missing
+data, inferred source units, and complete separation of grouped outcomes are
+reported explicitly. No split or statistical hypothesis tests are performed.

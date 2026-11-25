@@ -1,0 +1,11 @@
+,Low,Moderate,High,Critical
+Asthma,394,366,290,176
+Chronic kidney disease,41,45,41,21
+Diabetes,421,473,393,173
+HIV,93,92,49,31
+Heart disease,78,109,98,48
+Hypertension,930,941,815,361
+Other chronic condition,250,220,190,72
+Sickle cell disease,120,145,141,57
+No known conditions,3132,2704,1733,620
+Unknown (missing response),93,111,67,22

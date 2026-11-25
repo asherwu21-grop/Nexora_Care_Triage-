@@ -70,3 +70,57 @@
   domain review of technical vital bounds remain outstanding. No models or clinical
   predictions were produced. Only dependencies needed for this task were installed;
   the full model-training stack has not been validated.
+
+
+## 2026-11-25 — Exploratory data analysis and reusable Plotly figures
+
+- Read `AGENTS.md`. Implemented `src/eda.py` for reusable EDA aggregation,
+  artifact generation, and artifact-backed written analytical patterns. Added
+  the explicitly requested Plotly helpers in `dashboard/utils/visualization.py`;
+  notebook imports remain limited to `src/`. This presentation helper location
+  follows the task's explicit instruction; loading and analytical logic stay in `src/`.
+- Created and executed `notebooks/02_exploratory_data_analysis.ipynb`. Covered
+  urgency; age, sex, pregnancy and applicability; chief complaint; severity,
+  duration, onset and pain; multivalue item frequencies and counts; all vitals
+  and missingness; and prior requests. Each exposure has an urgency comparison.
+  Added core and full numeric Spearman heatmaps with pairwise sample-size CSVs.
+- Wrote 25 interactive HTML figures and
+  11 key PNGs, companion CSV tables, `summary.json`,
+  `figure_manifest.json`, `analytical_patterns.md`, and an offline `index.html`
+  under `artifacts/eda/`. A shared local Plotly bundle avoids duplicated bundles.
+  Values in the notebook's final written section are read from saved artifacts.
+- Plot denominators are explicit: categorical percentages are within category,
+  multivalue items overlap, unknowns remain distinct from none, and numeric plots
+  omit missing values with sample sizes displayed. No imputation, tests of
+  statistical hypotheses, split creation, model fitting, or prediction was added.
+- Key cohort numbers from `artifacts/eda/summary.json`: 14,809
+  labelled requests from 9,792 patients;
+  5,017 requests beyond a patient's first
+  labelled request; 276 unlabelled requests excluded.
+  Class counts: {'Low': 5210, 'Moderate': 4813, 'High': 3427, 'Critical': 1359}.
+- Visible hypotheses are documented for severity/pain, complaint/onset, red flags,
+  comorbidities, duration, age, vitals, missingness and history. Sex compositions
+  look similar. Formal tests remain future work and must account for repeated
+  patients, sparse cells, multiple comparisons, and assumption checks.
+- Data quality findings: BP missingness patterns identical =
+  True; labelled unknown multivalue counts
+  {'red_flags': 262, 'comorbidities': 293}; raw-day skewness
+  5.099 versus log-hours
+  -0.229; age range
+  16.03–89.96. Duration/source temperature units
+  and technical vital bounds still require source/domain confirmation.
+- Complete grouped-outcome separation detected directly from the plotted item
+  counts: [{'field': 'red_flags', 'item': 'Thoughts of self-harm', 'requests': 333, 'class_counts': {'Low': 0, 'Moderate': 0, 'High': 192, 'Critical': 141}}]. This is explicitly flagged
+  for source label-construction/triage-rule provenance review before modelling.
+- Added `tests/test_eda.py` for within-category denominators, zero/unknown groups,
+  overlapping multivalue counts, pairwise Spearman sample sizes, and preservation
+  of missing values and extremes. Ruff and the full pytest suite passed; exact
+  outputs are recorded in `artifacts/eda/checks.json`. Notebook execution recorded
+  9 executed code cells and
+  25 Plotly outputs, with preparation inputs unchanged.
+  Inspected key PNGs and corrected clipped count labels and box contrast.
+- Updated README usage and pinned Kaleido in `requirements.txt`. Local Jupyter
+  and static rendering required execution outside the sandbox after a blocked
+  local socket/bundled renderer failure. Open issues: descriptive full-cohort EDA
+  means a later holdout from this cohort is not fully blinded; no significance,
+  causal, clinical-validity, or unseen-patient performance conclusions are made.

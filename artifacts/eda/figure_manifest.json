@@ -1,0 +1,88 @@
+{
+  "urgency_distribution": {
+    "html": "urgency_distribution.html",
+    "png": "urgency_distribution.png"
+  },
+  "sex": {
+    "html": "sex.html"
+  },
+  "pregnancy_flag": {
+    "html": "pregnancy_flag.html"
+  },
+  "chief_complaint_category": {
+    "html": "chief_complaint_category.html",
+    "png": "chief_complaint_category.png"
+  },
+  "symptom_severity": {
+    "html": "symptom_severity.html",
+    "png": "symptom_severity.png"
+  },
+  "symptom_onset": {
+    "html": "symptom_onset.html"
+  },
+  "pain_level": {
+    "html": "pain_level.html"
+  },
+  "red_flags": {
+    "html": "red_flags.html",
+    "png": "red_flags.png"
+  },
+  "comorbidities": {
+    "html": "comorbidities.html"
+  },
+  "patient_age": {
+    "html": "patient_age.html",
+    "png": "patient_age.png"
+  },
+  "symptom_duration_days": {
+    "html": "symptom_duration_days.html",
+    "png": "symptom_duration_days.png"
+  },
+  "symptom_duration_log1p_hours": {
+    "html": "symptom_duration_log1p_hours.html",
+    "png": "symptom_duration_log1p_hours.png"
+  },
+  "red_flag_count": {
+    "html": "red_flag_count.html"
+  },
+  "comorbidity_count": {
+    "html": "comorbidity_count.html"
+  },
+  "prior_patient_request_count": {
+    "html": "prior_patient_request_count.html"
+  },
+  "systolic_bp": {
+    "html": "systolic_bp.html"
+  },
+  "diastolic_bp": {
+    "html": "diastolic_bp.html"
+  },
+  "body_temperature": {
+    "html": "body_temperature.html"
+  },
+  "heart_rate": {
+    "html": "heart_rate.html",
+    "png": "heart_rate.png"
+  },
+  "respiratory_rate": {
+    "html": "respiratory_rate.html"
+  },
+  "oxygen_saturation": {
+    "html": "oxygen_saturation.html",
+    "png": "oxygen_saturation.png"
+  },
+  "vital_missingness": {
+    "html": "vital_missingness.html",
+    "png": "vital_missingness.png"
+  },
+  "pregnancy_by_sex": {
+    "html": "pregnancy_by_sex.html"
+  },
+  "correlations_core": {
+    "html": "correlations_core.html",
+    "png": "correlations_core.png"
+  },
+  "correlations_all_numeric": {
+    "html": "correlations_all_numeric.html"
+  }
+}

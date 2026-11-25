@@ -1,0 +1,37 @@
+{
+  "ruff": {
+    "command": ".venv/bin/ruff check .",
+    "exit_code": 0,
+    "output": "All checks passed!\n"
+  },
+  "pytest": {
+    "command": ".venv/bin/pytest -q",
+    "exit_code": 0,
+    "output": "....................                                                     [100%]\n20 passed in 1.72s\n"
+  },
+  "diff_check": {
+    "command": "git diff --check",
+    "exit_code": 0,
+    "output": ""
+  },
+  "notebook": {
+    "status": "passed",
+    "notebook": "notebooks/02_exploratory_data_analysis.ipynb",
+    "executed_code_cells": 9,
+    "plotly_figure_outputs": 25,
+    "html_figure_count": 25,
+    "png_figure_count": 11,
+    "preparation_sources_unchanged": true
+  },
+  "visual_review": {
+    "status": "inspected and adjusted labels, margins, and box contrast",
+    "png_files": [
+      "urgency_distribution.png",
+      "patient_age.png",
+      "chief_complaint_category.png",
+      "red_flags.png",
+      "vital_missingness.png",
+      "correlations_core.png"
+    ]
+  }
+}

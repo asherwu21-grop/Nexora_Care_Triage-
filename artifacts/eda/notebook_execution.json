@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "notebook": "notebooks/02_exploratory_data_analysis.ipynb",
+  "executed_code_cells": 9,
+  "plotly_figure_outputs": 25,
+  "html_figure_count": 25,
+  "png_figure_count": 11,
+  "preparation_sources_unchanged": true
+}

@@ -1,0 +1,283 @@
+{
+  "scope": "All prepared labelled requests; no split exists or is created; request-level EDA",
+  "limitations": "Descriptive exploration only. Repeat patients violate independence assumptions. No significance, causal, predictive-performance, or clinical claims. Future testing must account for patient clustering and multiple comparisons. A later holdout drawn from this explored cohort is not fully blinded.",
+  "class_counts": {
+    "Low": 5210,
+    "Moderate": 4813,
+    "High": 3427,
+    "Critical": 1359
+  },
+  "category_high_or_critical_fraction": {
+    "sex": {
+      "Female": 0.3233481262327416,
+      "Male": 0.3229804390025385
+    },
+    "pregnancy_flag": {
+      "Yes": 0.34944237918215615,
+      "No": 0.30168589174800353,
+      "Not applicable": 0.3359910162829871
+    },
+    "chief_complaint_category": {
+      "Abdominal Pain": 0.32290958531611147,
+      "Breathing Difficulty": 0.7386934673366834,
+      "Chest Pain": 0.6352941176470588,
+      "Chronic Condition": 0.32116402116402115,
+      "Cough & Cold": 0.16529449018366055,
+      "ENT & Eye": 0.18478260869565216,
+      "Fever": 0.3154084798345398,
+      "Headache": 0.32533589251439543,
+      "Injury": 0.4606741573033708,
+      "Mental Health": 0.3970037453183521,
+      "Muscle & Joint Pain": 0.17857142857142858,
+      "Other": 0.31392174704276615,
+      "Pregnancy": 0.3855421686746988,
+      "Skin Rash": 0.165,
+      "Urinary Problem": 0.24444444444444444
+    },
+    "symptom_severity": {
+      "Mild": 0.05741551939924906,
+      "Moderate": 0.3083083083083083,
+      "Severe": 0.8413208649912332
+    },
+    "symptom_onset": {
+      "Sudden": 0.4424794256697602,
+      "Gradual": 0.23809523809523808,
+      "Recurring": 0.3211091234347048
+    },
+    "pain_level": {
+      "No pain": 0.06384505021520803,
+      "Mild": 0.22605621949166807,
+      "Moderate": 0.4585945945945946,
+      "Severe": 0.786254295532646
+    }
+  },
+  "multi_value_high_or_critical_fraction": {
+    "red_flags": {
+      "Breathing difficulty": 0.8374558303886925,
+      "Chest pain": 0.805952380952381,
+      "Confusion": 0.8190630048465266,
+      "Loss of consciousness": 0.7942857142857143,
+      "Seizure": 0.834862385321101,
+      "Severe allergic reaction": 0.688953488372093,
+      "Severe bleeding": 0.8003992015968064,
+      "Stroke signs": 0.7296416938110749,
+      "Thoughts of self-harm": 1.0,
+      "No red flags": 0.1808336366945759,
+      "Unknown (missing response)": 0.2900763358778626
+    },
+    "comorbidities": {
+      "Asthma": 0.3800978792822186,
+      "Chronic kidney disease": 0.4189189189189189,
+      "Diabetes": 0.3876712328767123,
+      "HIV": 0.3018867924528302,
+      "Heart disease": 0.43843843843843844,
+      "Hypertension": 0.3859533967837217,
+      "Other chronic condition": 0.35792349726775957,
+      "Sickle cell disease": 0.42764578833693306,
+      "No known conditions": 0.28733667114421785,
+      "Unknown (missing response)": 0.30375426621160406
+    }
+  },
+  "numeric_medians_by_urgency": {
+    "patient_age": {
+      "Low": 33.6491915473966,
+      "Moderate": 37.26237949089633,
+      "High": 38.69448031609643,
+      "Critical": 42.72367584803501
+    },
+    "symptom_duration_days": {
+      "Low": 3.1166666666666667,
+      "Moderate": 2.7666666666666666,
+      "High": 1.9270833333333333,
+      "Critical": 0.7708333333333334
+    },
+    "symptom_duration_log1p_hours": {
+      "Low": 4.328098268475406,
+      "Moderate": 4.210645017918261,
+      "High": 3.855452653939752,
+      "Critical": 2.970414465569701
+    },
+    "red_flag_count": {
+      "Low": 0.0,
+      "Moderate": 0.0,
+      "High": 1.0,
+      "Critical": 1.0
+    },
+    "comorbidity_count": {
+      "Low": 0.0,
+      "Moderate": 0.0,
+      "High": 0.0,
+      "Critical": 1.0
+    },
+    "prior_patient_request_count": {
+      "Low": 0.0,
+      "Moderate": 0.0,
+      "High": 0.0,
+      "Critical": 0.0
+    },
+    "systolic_bp": {
+      "Low": 117.0,
+      "Moderate": 120.0,
+      "High": 121.0,
+      "Critical": 120.0
+    },
+    "diastolic_bp": {
+      "Low": 78.0,
+      "Moderate": 80.0,
+      "High": 80.0,
+      "Critical": 81.0
+    },
+    "body_temperature": {
+      "Low": 36.9,
+      "Moderate": 37.1,
+      "High": 37.2,
+      "Critical": 37.4
+    },
+    "heart_rate": {
+      "Low": 78.0,
+      "Moderate": 85.0,
+      "High": 95.0,
+      "Critical": 106.0
+    },
+    "respiratory_rate": {
+      "Low": 16.0,
+      "Moderate": 17.0,
+      "High": 19.0,
+      "Critical": 21.0
+    },
+    "oxygen_saturation": {
+      "Low": 98.0,
+      "Moderate": 97.0,
+      "High": 96.0,
+      "Critical": 94.0
+    }
+  },
+  "quality": {
+    "labelled_requests": 14809,
+    "unique_patients": 9792,
+    "requests_beyond_first_per_patient": 5017,
+    "patients_with_multiple_labelled_requests": 3458,
+    "unlabelled_excluded": 276,
+    "duplicate_request_ids": 0,
+    "age_min": 16.02967346149273,
+    "age_max": 89.96064974842945,
+    "age_missing": 0,
+    "age_under_18": 213,
+    "negative_ages": 0,
+    "paired_bp_missingness_identical": true,
+    "bp_missingness_disagreements": 0,
+    "high_or_critical_only_items": [
+      {
+        "field": "red_flags",
+        "item": "Thoughts of self-harm",
+        "requests": 333,
+        "class_counts": {
+          "Low": 0,
+          "Moderate": 0,
+          "High": 192,
+          "Critical": 141
+        }
+      }
+    ],
+    "vital_values_newly_missing_in_preparation": 0,
+    "unknown_multivalue_labelled": {
+      "red_flags": 262,
+      "comorbidities": 293
+    },
+    "unknown_multivalue_raw": {
+      "red_flags": 267,
+      "comorbidities": 301
+    },
+    "duration_unit_status": "Inferred from magnitude and minute-aligned values; no source unit metadata",
+    "duration_days_median": 2.5368055555555555,
+    "duration_days_max": 120.0,
+    "duration_days_skew": 5.098690987896725,
+    "duration_log_hours_skew": -0.22907187921113212,
+    "normalised_multivalue_rows_in_preparation": {
+      "red_flags": 971,
+      "comorbidities": 1190
+    },
+    "pregnancy_by_sex": {
+      "No": {
+        "Female": 5635,
+        "Male": 0
+      },
+      "Not applicable": {
+        "Female": 2208,
+        "Male": 6697
+      },
+      "Yes": {
+        "Female": 269,
+        "Male": 0
+      }
+    },
+    "all_intake_text_missingness": {
+      "reported_symptoms": 275,
+      "medical_history": 457,
+      "current_medications": 419,
+      "symptom_description": 457
+    }
+  },
+  "sources_sha256": {
+    "data/processed/triage_dataset.csv": "6747aa982cdb216f09a5d6c726da3cbb2ed05d4182b671ac26431535885d4f28",
+    "artifacts/data_profile.json": "1c7043654e98f23b14f8f541ab7ec6c359aade12a7d8a88c3a6854e24e38f3e0",
+    "artifacts/feature_schema.json": "7180442debe2a2808f071de3404758c98cbac5f7aa802f15ccf5031b757f4b63"
+  },
+  "vital_missing_fractions": {
+    "Overall": {
+      "systolic_bp": 0.06678371260719833,
+      "diastolic_bp": 0.06678371260719833,
+      "body_temperature": 0.042339118103855766,
+      "heart_rate": 0.02532243905733,
+      "respiratory_rate": 0.06252954284556689,
+      "oxygen_saturation": 0.06327233439124856
+    },
+    "Low": {
+      "systolic_bp": 0.06238003838771593,
+      "diastolic_bp": 0.06238003838771593,
+      "body_temperature": 0.042418426103646836,
+      "heart_rate": 0.023032629558541268,
+      "respiratory_rate": 0.05700575815738963,
+      "oxygen_saturation": 0.060844529750479846
+    },
+    "Moderate": {
+      "systolic_bp": 0.06856430500727197,
+      "diastolic_bp": 0.06856430500727197,
+      "body_temperature": 0.04196966548929981,
+      "heart_rate": 0.020361520880947434,
+      "respiratory_rate": 0.06274672761271556,
+      "oxygen_saturation": 0.06150010388531062
+    },
+    "High": {
+      "systolic_bp": 0.0665304931426904,
+      "diastolic_bp": 0.0665304931426904,
+      "body_temperature": 0.039684855558797784,
+      "heart_rate": 0.02888824044353662,
+      "respiratory_rate": 0.06828129559381384,
+      "oxygen_saturation": 0.06565509191712868
+    },
+    "Critical": {
+      "systolic_bp": 0.07799852832965416,
+      "diastolic_bp": 0.07799852832965416,
+      "body_temperature": 0.05003679175864607,
+      "heart_rate": 0.042678440029433405,
+      "respiratory_rate": 0.0684326710816777,
+      "oxygen_saturation": 0.0728476821192053
+    }
+  },
+  "spearman_with_urgency": {
+    "patient_age": 0.07445029451770659,
+    "symptom_duration_log1p_hours": -0.20794345909275938,
+    "systolic_bp": 0.07081222425709909,
+    "diastolic_bp": 0.06442998863170896,
+    "body_temperature": 0.2728950879919255,
+    "heart_rate": 0.5971149536809265,
+    "respiratory_rate": 0.39219320221546766,
+    "oxygen_saturation": -0.5756723018811694,
+    "symptom_severity_ordinal": 0.6946650343352007,
+    "pain_level_ordinal": 0.4909465510115118,
+    "red_flag_count": 0.5304857626121572,
+    "comorbidity_count": 0.10371391521309783,
+    "prior_patient_request_count": 0.04854891359887828
+  }
+}

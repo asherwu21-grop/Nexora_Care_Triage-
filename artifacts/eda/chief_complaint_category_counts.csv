@@ -1,0 +1,16 @@
+chief_complaint_category,Low,Moderate,High,Critical
+Abdominal Pain,484,512,341,134
+Breathing Difficulty,63,145,342,246
+Chest Pain,100,179,311,175
+Chronic Condition,599,684,471,136
+Cough & Cold,821,497,210,51
+ENT & Eye,316,209,96,23
+Fever,606,718,446,164
+Headache,360,343,220,119
+Injury,137,151,166,80
+Mental Health,139,183,159,53
+Muscle & Joint Pain,490,338,143,37
+Other,416,338,255,90
+Pregnancy,18,33,21,11
+Skin Rash,445,223,111,21
+Urinary Problem,216,260,135,19
