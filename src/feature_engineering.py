@@ -178,3 +178,121 @@ def engineer_features(intake: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
         "safety_notice": "Experimental output. Not a clinical decision.",
     }
     return result, schema
+
+
+def model_feature_groups() -> dict[str, list[str]]:
+    """Fixed allowlist for processed intake features; metadata/labels are never selected."""
+    flags = [f"{column}_missing" for column in VITAL_COLUMNS]
+    for field, spec in MULTIVALUE_SPECS.items():
+        flags.extend(item_column(field, item) for item in spec["items"])
+        flags.extend([f"{field}_unknown", f"{field}_none"])
+    return {
+        "numeric": [
+            "patient_age",
+            "symptom_duration_log1p_hours",
+            *VITAL_COLUMNS,
+            "red_flag_count",
+            "comorbidity_count",
+            "prior_patient_request_count",
+        ],
+        "ordinal": [f"{column}_ordinal" for column in ORDINAL_MAPPINGS],
+        "categorical": list(CATEGORICAL_FEATURES),
+        "multi_hot_and_missing": flags,
+    }
+
+
+def model_feature_columns(include_text: bool = False) -> list[str]:
+    """Return only allowed model inputs, with optional submission-time text."""
+    columns = [column for block in model_feature_groups().values() for column in block]
+    return [*columns, "symptom_description"] if include_text else columns
+
+
+def fill_missing_descriptions(values):
+    """Fixed missing-text token, applied inside the pipeline before learned TF-IDF."""
+    return (
+        pd.Series(values)
+        .astype("string")
+        .str.strip()
+        .replace("", pd.NA)
+        .fillna("missingdescription")
+        .to_numpy(dtype=str)
+    )
+
+
+def build_preprocessor(include_text: bool = False, tfidf_max_features: int = 2000):
+    """Return an UNFITTED ColumnTransformer with train-only learned preprocessing.
+
+    Numeric medians and scaling and categorical vocabularies learn only on fit.
+    Severity/pain already have schema-defined ordinal codes: a fixed encoder
+    preserves those codes; missing/unseen codes become -1 rather than 'Mild'.
+    Multi-hot/unknown/none and vital-missingness indicators pass through unchanged.
+    Entirely missing training numerics keep their column with a zero fallback.
+    """
+    from sklearn.compose import ColumnTransformer
+    from sklearn.feature_extraction.text import TfidfVectorizer
+    from sklearn.impute import SimpleImputer
+    from sklearn.pipeline import Pipeline
+    from sklearn.preprocessing import (
+        FunctionTransformer,
+        OneHotEncoder,
+        OrdinalEncoder,
+        StandardScaler,
+    )
+
+    groups = model_feature_groups()
+    numeric = Pipeline(
+        [
+            ("impute", SimpleImputer(strategy="median", keep_empty_features=True)),
+            ("scale", StandardScaler()),
+        ]
+    )
+    ordinal = Pipeline(
+        [
+            ("impute", SimpleImputer(strategy="constant", fill_value=-1, keep_empty_features=True)),
+            (
+                "encode",
+                OrdinalEncoder(
+                    categories=[list(mapping.values()) for mapping in ORDINAL_MAPPINGS.values()],
+                    handle_unknown="use_encoded_value",
+                    unknown_value=-1,
+                ),
+            ),
+        ]
+    )
+    categorical = Pipeline(
+        [
+            (
+                "impute",
+                SimpleImputer(strategy="constant", fill_value="Unknown", keep_empty_features=True),
+            ),
+            ("encode", OneHotEncoder(handle_unknown="ignore", sparse_output=True)),
+        ]
+    )
+    transformers = [
+        ("numeric", numeric, groups["numeric"]),
+        ("ordinal", ordinal, groups["ordinal"]),
+        ("categorical", categorical, groups["categorical"]),
+        ("multi_hot_and_missing", "passthrough", groups["multi_hot_and_missing"]),
+    ]
+    if include_text:
+        text = Pipeline(
+            [
+                (
+                    "fill_missing",
+                    FunctionTransformer(
+                        fill_missing_descriptions, validate=False, feature_names_out="one-to-one"
+                    ),
+                ),
+                (
+                    "tfidf",
+                    TfidfVectorizer(
+                        max_features=tfidf_max_features,
+                        ngram_range=(1, 2),
+                        sublinear_tf=True,
+                    ),
+                ),
+            ]
+        )
+        # Scalar column selection supplies the 1-D documents expected by TF-IDF.
+        transformers.append(("text", text, "symptom_description"))
+    return ColumnTransformer(transformers, remainder="drop", sparse_threshold=1.0)

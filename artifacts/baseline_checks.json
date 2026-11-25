@@ -1,0 +1,41 @@
+{
+  "repeat_run_validation_artifacts_identical": true,
+  "artifact_sha256": {
+    "splits.json": "4388e87f4378038aa6c39054f917b15fc8ed85072bb7177d90ff33239cbb351b",
+    "split_class_counts.csv": "6fa0a66371205f0eb411dc5ac852f862bf36a6ce3376e951cce06587e23e5aa4",
+    "baseline_metrics.json": "45864002344e9a3621f2468464eb0c7db25478b2e6a6c092b0ed9a136f3b74a2",
+    "baseline_training.json": "63aac887f709858b58e3d89849e46c7cf8e4184a8e060fc4a54bc9ac58e00b5c",
+    "baseline_validation_predictions.csv": "fcc6375dc5c0d497d0fa856b65b5bb4c29081b14da556c3f6c8aa4921e46bbb8"
+  },
+  "prepared_dataset_unchanged": true,
+  "patient_overlap": false,
+  "strict_chronology": true,
+  "test_transformed_or_evaluated": false,
+  "saved_model_validation_predictions_match": true,
+  "preprocessor_training_samples": 10366,
+  "notebook": {
+    "status": "passed",
+    "notebook": "notebooks/04_baseline_model.ipynb",
+    "executed_code_cells": 2,
+    "error_outputs": 0,
+    "source_dataset_unchanged": true,
+    "evaluation_split": "validation",
+    "test_evaluated": false
+  },
+  "ruff": {
+    "command": ".venv/bin/ruff check .",
+    "exit_code": 0,
+    "output": "All checks passed!\n"
+  },
+  "pytest": {
+    "command": ".venv/bin/pytest -q",
+    "exit_code": 0,
+    "output": "................................................                         [100%]\n48 passed in 7.15s\n"
+  },
+  "diff_check": {
+    "command": "git diff --check",
+    "exit_code": 0,
+    "output": ""
+  },
+  "notebook_report_table_verified": true
+}

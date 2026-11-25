@@ -203,13 +203,29 @@ def test_cohort_holm_and_posthoc_families():
     assert "practical/clinical importance" in results.iloc[0]["interpretation"]
 
 
-def test_real_workflow_artifact_contracts(tmp_path):
-    from src.config import PROCESSED_DATA_DIR
+def test_real_workflow_artifact_contracts(tmp_path, monkeypatch):
+    from src.config import ARTIFACTS_DIR, PROCESSED_DATA_DIR
     from src.hypothesis_testing import run_hypothesis_testing
 
     source = PROCESSED_DATA_DIR / "triage_dataset.csv"
     if not source.exists():
         pytest.skip("Prepared local dataset unavailable; statistical unit tests still run")
+    split_path = ARTIFACTS_DIR / "splits.json"
+    if split_path.exists():
+        # After modelling splits exist, do not repeat full-cohort hypothesis
+        # exploration on validation/test requests during routine test runs.
+        training_ids = set(json.loads(split_path.read_text())["train"])
+        pieces = [
+            chunk.loc[chunk.request_id.isin(training_ids)]
+            for chunk in pd.read_csv(source, chunksize=4096)
+        ]
+        training = pd.concat(pieces, ignore_index=True)
+        assert set(training.request_id) == training_ids
+        inputs = tmp_path / "training_input"
+        inputs.mkdir()
+        source = inputs / "triage_dataset.csv"
+        training.to_csv(source, index=False)
+        monkeypatch.setattr("src.hypothesis_testing.PROCESSED_DATA_DIR", inputs)
     results, posthoc = run_hypothesis_testing(tmp_path)
     assert len(results) == 2 * len(hypothesis_specs())
     assert (

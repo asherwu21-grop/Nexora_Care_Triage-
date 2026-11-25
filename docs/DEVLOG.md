@@ -194,3 +194,76 @@
   is not cluster-robust inference; practical significance needs domain thresholds;
   source duration units and label-generation provenance remain unconfirmed.
   Method references are saved in `hypothesis_methods.json` and the notebook.
+
+
+## 2026-11-25 — Grouped chronological splits and validation-only baseline
+
+- Read `AGENTS.md`. Implemented metadata-only split assignment and baseline
+  training in `src/train.py`, evaluation/error accounting in `src/evaluate.py`,
+  and an unfitted reusable ColumnTransformer in `src/feature_engineering.py`.
+  Created/executed `notebooks/04_baseline_model.ipynb`, added
+  `tests/test_training_evaluation.py`, and updated README instructions.
+- Saved request IDs and split design to `artifacts/splits.json` and descriptive
+  counts to `artifacts/split_class_counts.csv`. Cutoffs use request dates only:
+  validation starts at 2026-04-10T21:46:25; test
+  starts at 2026-05-21T17:59:04. Patients belong to their
+  first labelled-request window. Later requests from those patients are excluded,
+  preserving strict date order and no patient overlap. No class stratification
+  or fold fallback was needed. Boundary ties go to the later window.
+- Split counts read from the generated count artifact:
+  - train: 10,366 requests, 7,664 patients; Low=3,712, Moderate=3,319, High=2,391, Critical=944
+  - validation: 1,179 requests, 1,114 patients; Low=428, Moderate=384, High=273, Critical=94
+  - test: 1,074 requests, 1,014 patients; Low=380, Moderate=380, High=228, Critical=86
+  - excluded: 2,190 requests, 1,836 patients; Low=690, Moderate=730, High=535, Critical=235
+  Excluded patients overlap earlier retained cohorts, so these patient counts
+  are not additive. Reduced later split sizes are intentional; later cohorts
+  target newly encountered labelled patients rather than all future requests.
+- Preprocessing fits training only inside the sklearn pipeline: numeric median
+  imputation and scaling, fixed ordinal codes with unknown/missing encoding,
+  train-learned one-hot categorical vocabulary, and unchanged fixed multi-hot,
+  unknown/none and vital-missingness flags. All-missing training numeric columns
+  are retained with a documented zero fallback. Optional submission-description
+  TF-IDF is available behind a flag and tested; it is disabled for this baseline.
+  Identifiers, dates, assessment fields and target never enter model features.
+- Fitted the prespecified balanced LogisticRegression baseline on
+  10,366 training requests. No parameter search, resampling,
+  threshold tuning, or validation refit was performed. Saved the complete pipeline
+  to `models/baseline_logistic_regression.joblib` (ignored by Git), provenance to
+  `artifacts/baseline_training.json`, validation predictions to
+  `artifacts/baseline_validation_predictions.csv`, and validation metrics to
+  `artifacts/baseline_metrics.json`.
+- Validation-only metrics read from that artifact: n=1,179;
+  High recall=0.586081, Critical recall=0.819149,
+  macro F1=0.688829, weighted F1=0.704029,
+  accuracy=0.706531, balanced accuracy=0.715367.
+  Under-triage=162 (13.740458%);
+  over-triage=184 (15.606446%);
+  severe under-triage=11
+  (0.932994% of all validation requests).
+  Severe breakdown: {'Critical_to_Low': 0, 'Critical_to_Moderate': 4, 'High_to_Low': 7}.
+  High recall and remaining under-triage warrant attention in later development;
+  these are experimental outputs, not clinical decisions or evidence of safety.
+- Evaluation returns strict JSON-compatible dicts with the full classification
+  report, ordered confusion matrix, all required scalar metrics, ordinal error
+  counts/rates and per-true-class denominators. Absent-class error rates are null;
+  invalid/empty labels raise errors. Tests include hand-computed metrics and errors.
+- Tests assert patient/request separation, strict chronology, tie handling,
+  target-blind/stable split assignment, exhaustive retained/excluded coverage,
+  train-only medians, unknown category handling, train-only text vocabulary, and
+  fit/predict partition isolation. Updated the pre-existing real statistical
+  integration test to use training requests once a holdout exists, preventing
+  future routine test runs from repeating full-cohort hypothesis exploration.
+- Verification from `artifacts/baseline_checks.json`: Ruff passed; pytest output:
+  48 passed in 7.15s. Notebook executed
+  2 code cells with
+  0 errors and preserved processed data.
+  Repeated splits/validation artifacts match byte-for-byte; the reloaded pipeline
+  reproduces saved validation predictions. Model fitting saw
+  10,366 requests. No test transformation,
+  predictions, performance evaluation, or tuning occurred in the baseline workflow.
+- Open limitations: earlier EDA/hypothesis analysis covered the full cohort, so
+  the newly reserved holdout is not fully blinded to prior exploration. Test
+  metadata and requested class counts are recorded, while model evaluation is
+  reserved for the final phase. Source units/label-construction provenance and
+  calibration/stability assessment remain future concerns. Existing dependency
+  pins were unchanged; the required pinned sklearn/joblib versions were installed.

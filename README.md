@@ -5,8 +5,9 @@ Experimental decision support for estimating telemedicine request urgency.
 **Experimental output. Not a clinical decision.**
 
 Data ingestion, profiling, cleaning, integration, deterministic feature engineering,
-exploratory analysis, and statistical hypothesis tests are implemented. Model training,
-evaluation, explainability, and dashboard views are not implemented.
+exploratory analysis, statistical hypothesis tests, and a logistic regression baseline
+with validation evaluation are implemented. Final test evaluation, explainability,
+and dashboard views are not implemented.
 
 ## Setup
 
@@ -19,6 +20,7 @@ pip install -r requirements.txt
 ruff check .
 pytest -q
 python -m src.data_preprocessing
+python -m src.train
 streamlit run dashboard/app.py
 ```
 
@@ -119,3 +121,37 @@ are nominal because patients repeat. A reproducible random request per patient i
 selected before any missing-value exclusions for the sensitivity analysis. Effect
 sizes and plain-language interpretations separate statistical detection from
 practical importance; these analyses do not establish causation.
+
+## Baseline training and reserved test set
+
+Run `python -m src.train` or execute `notebooks/04_baseline_model.ipynb` from the
+repository root. `artifacts/splits.json` freezes request IDs for train, validation,
+test, and excluded requests; `artifacts/split_class_counts.csv` reports class counts
+and date ranges. Cutoffs depend only on request times. Patients are assigned to
+their first labelled-request window, and later requests from those patients are
+excluded to preserve strict chronological ordering and no patient overlap. This
+reduces later split sizes and targets new labelled-patient cohorts in later periods.
+Excluded patient counts can overlap retained patient counts and are not additive.
+
+Preprocessing and balanced logistic regression fit training only inside one saved
+pipeline. Numeric features use median imputation and scaling, severity/pain retain
+their ordinal order, categorical fields use one-hot encoding, and fixed multi-hot
+and missingness indicators pass through. Optional intake-description TF-IDF is
+available via `train_baseline(include_text=True)` and is disabled by default.
+All learned preprocessing, vocabularies, and class weights use training data only.
+
+`artifacts/baseline_metrics.json` contains **validation-only** accuracy, balanced
+accuracy, macro/weighted F1, the class report, confusion matrix, and triage errors.
+The confusion matrix follows the configured urgency order with true labels as
+rows. Severe under-triage is Critical to Low/Moderate or High to Low. Overall
+error rates divide by all evaluated requests; class-specific rates divide by true
+class support. `artifacts/baseline_validation_predictions.csv` contains validation
+predictions, and `artifacts/baseline_training.json` records fit provenance. The
+fitted pipeline is saved to `models/baseline_logistic_regression.joblib`.
+
+Test metadata and the requested descriptive class counts are recorded, but test
+features never enter model fitting or prediction, and test performance is not
+computed. Earlier full-cohort EDA/hypothesis testing means the newly reserved
+holdout is not fully blinded to previous exploration. Retain it for final model
+evaluation. Review High/Critical recall and under-triage before aggregate accuracy;
+experimental model output is not a clinical decision.

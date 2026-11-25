@@ -1,0 +1,9 @@
+{
+  "status": "passed",
+  "notebook": "notebooks/04_baseline_model.ipynb",
+  "executed_code_cells": 2,
+  "error_outputs": 0,
+  "source_dataset_unchanged": true,
+  "evaluation_split": "validation",
+  "test_evaluated": false
+}
