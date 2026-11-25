@@ -9,12 +9,19 @@ import hashlib
 import json
 import warnings
 from pathlib import Path
+from time import perf_counter
 
 import joblib
+import numpy as np
 import pandas as pd
+from imblearn.over_sampling import SMOTE, RandomOverSampler
+from imblearn.pipeline import Pipeline as ImbalancePipeline
+from imblearn.under_sampling import RandomUnderSampler
+from sklearn.base import BaseEstimator, ClassifierMixin, clone
 from sklearn.exceptions import ConvergenceWarning
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import Pipeline
+from sklearn.utils.class_weight import compute_sample_weight
 
 from src.config import (
     ARTIFACTS_DIR,
@@ -422,5 +429,225 @@ def show_baseline_results(output_dir: Path = ARTIFACTS_DIR) -> None:
     display(Markdown("\n\n".join(metrics["audit_notes"])))
 
 
+# Experiment construction stays here so notebooks and future model workflows share
+# exactly the baseline feature allowlist and unfitted preprocessing.
+
+MODEL_NAMES = ("LogisticRegression", "DecisionTree", "RandomForest", "XGBoost", "LightGBM")
+IMBALANCE_STRATEGIES = (
+    "none",
+    "class_weights",
+    "random_oversampling",
+    "random_undersampling",
+    "smote",
+)
+
+
+class FoldWeightedClassifier(ClassifierMixin, BaseEstimator):
+    """Compute balanced multiclass sample weights inside each fit, including XGBoost.
+
+    Targets are fixed ordinal integer codes, not fitted encodings. No global
+    precomputed weights enter CV. Other strategies pass no sample weights.
+    """
+
+    def __init__(self, estimator, balanced=False):
+        self.estimator = estimator
+        self.balanced = balanced
+
+    def fit(self, X, y):
+        self.estimator_ = clone(self.estimator)
+        self.fit_class_counts_ = {
+            str(label): int(np.sum(np.asarray(y) == label)) for label in np.unique(y)
+        }
+        if set(self.fit_class_counts_) != {"0", "1", "2", "3"}:
+            raise ValueError("Each model-training fold must contain all four urgency classes")
+        self.n_fit_ = len(y)
+        if self.balanced:
+            weight = compute_sample_weight("balanced", y)
+            self.fit_weight_totals_ = {
+                str(label): float(weight[np.asarray(y) == label].sum()) for label in np.unique(y)
+            }
+            self.estimator_.fit(X, y, sample_weight=weight)
+        else:
+            self.estimator_.fit(X, y)
+        self.classes_ = self.estimator_.classes_
+        return self
+
+    def predict(self, X):
+        return self.estimator_.predict(X)
+
+    def predict_proba(self, X):
+        # The common ColumnTransformer emits arrays. LightGBM invents Column_N
+        # names at fit, then warns about their absence on the identical array
+        # schema. Named-column selection already happened upstream.
+        with warnings.catch_warnings():
+            warnings.filterwarnings(
+                "ignore",
+                category=UserWarning,
+                message="X does not have valid feature names, but LGBMClassifier was fitted",
+            )
+            return self.estimator_.predict_proba(X)
+
+
+class TimedResamplingPipeline(ImbalancePipeline):
+    """Measure complete preprocessing/resampling/classifier fit for CV run logging."""
+
+    def fit(self, X, y=None, **params):
+        started = perf_counter()
+        result = super().fit(X, y, **params)
+        self.fit_runtime_seconds_ = perf_counter() - started
+        return result
+
+
+def build_experiment_pipeline(model_name: str, imbalance: str, include_text: bool = False):
+    """Same preprocessor for every model; resampling executes only inside fit."""
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.tree import DecisionTreeClassifier
+
+    if model_name not in MODEL_NAMES or imbalance not in IMBALANCE_STRATEGIES:
+        raise ValueError("Unknown model or imbalance strategy")
+    if model_name == "LogisticRegression":
+        estimator = LogisticRegression(
+            C=1.0, solver="lbfgs", max_iter=3000, random_state=RANDOM_STATE
+        )
+    elif model_name == "DecisionTree":
+        estimator = DecisionTreeClassifier(random_state=RANDOM_STATE)
+    elif model_name == "RandomForest":
+        estimator = RandomForestClassifier(n_estimators=100, n_jobs=1, random_state=RANDOM_STATE)
+    elif model_name == "XGBoost":
+        from xgboost import XGBClassifier
+
+        estimator = XGBClassifier(
+            n_estimators=100,
+            objective="multi:softprob",
+            num_class=4,
+            tree_method="hist",
+            eval_metric="mlogloss",
+            n_jobs=1,
+            random_state=RANDOM_STATE,
+        )
+    else:
+        from lightgbm import LGBMClassifier
+
+        estimator = LGBMClassifier(
+            n_estimators=100,
+            n_jobs=1,
+            random_state=RANDOM_STATE,
+            verbosity=-1,
+            deterministic=True,
+            force_col_wise=True,
+        )
+    sampler = {
+        "none": "passthrough",
+        "class_weights": "passthrough",
+        "random_oversampling": RandomOverSampler(random_state=RANDOM_STATE),
+        "random_undersampling": RandomUnderSampler(random_state=RANDOM_STATE),
+        "smote": SMOTE(random_state=RANDOM_STATE, k_neighbors=3),
+    }[imbalance]
+    return TimedResamplingPipeline(
+        [
+            ("preprocess", build_preprocessor(include_text=include_text)),
+            ("resample", sampler),
+            (
+                "classifier",
+                FoldWeightedClassifier(estimator, balanced=imbalance == "class_weights"),
+            ),
+        ]
+    )
+
+
+def grouped_forward_cv(
+    metadata: pd.DataFrame, n_splits: int = 3
+) -> list[tuple[np.ndarray, np.ndarray]]:
+    """Expanding time-window CV with group purge, wholly inside the outer train set.
+
+    Validation contains new patients relative to that fold's fit prefix. Later
+    folds can train on earlier validation requests, as in forward chaining.
+    Returned indices address the original metadata row order.
+    """
+    if n_splits < 2:
+        raise ValueError("At least two grouped temporal CV folds are required")
+    timestamps = pd.to_datetime(metadata[REQUEST_TIMESTAMP_COL], format=TIMESTAMP_FORMAT)
+    if timestamps.isna().any() or metadata[PATIENT_ID_COL].isna().any():
+        raise ValueError("CV requires nonmissing patient IDs and request timestamps")
+    ordered = timestamps.sort_values(kind="stable")
+    edges = [
+        ordered.iloc[int(len(ordered) * fraction / (n_splits + 1))]
+        for fraction in range(1, n_splits + 1)
+    ]
+    if len(set(edges)) != n_splits:
+        raise ValueError("Tied timestamps make the requested CV windows infeasible")
+    folds = []
+    for index, start in enumerate(edges):
+        fit_mask = timestamps.lt(start)
+        valid_mask = timestamps.ge(start)
+        if index + 1 < len(edges):
+            valid_mask &= timestamps.lt(edges[index + 1])
+        previous_patients = set(metadata.loc[fit_mask, PATIENT_ID_COL])
+        valid_mask &= ~metadata[PATIENT_ID_COL].isin(previous_patients)
+        fit, valid = np.flatnonzero(fit_mask), np.flatnonzero(valid_mask)
+        if not len(fit) or not len(valid):
+            raise ValueError("Empty CV partition after enforcing time and patient separation")
+        if set(metadata.iloc[fit][PATIENT_ID_COL]) & set(metadata.iloc[valid][PATIENT_ID_COL]):
+            raise AssertionError("Patient leakage in CV")
+        if timestamps.iloc[fit].max() >= timestamps.iloc[valid].min():
+            raise AssertionError("Temporal leakage in CV")
+        folds.append((fit, valid))
+    return folds
+
+
+def experiment_parameter_space(model_name: str) -> dict:
+    """Small prespecified random-search spaces; no accuracy objective."""
+    prefix = "classifier__estimator__"
+    spaces = {
+        "LogisticRegression": {"C": [0.03, 0.1, 0.3, 1.0, 3.0, 10.0]},
+        "DecisionTree": {"max_depth": [4, 7, 10, None], "min_samples_leaf": [3, 10, 25]},
+        "RandomForest": {
+            "n_estimators": [100, 200],
+            "max_depth": [8, 14, None],
+            "min_samples_leaf": [1, 4, 10],
+            "max_features": ["sqrt", 0.7],
+        },
+        "XGBoost": {
+            "n_estimators": [100, 200],
+            "max_depth": [2, 3, 5],
+            "learning_rate": [0.03, 0.1, 0.2],
+            "min_child_weight": [1, 5],
+            "subsample": [0.8, 1.0],
+            "colsample_bytree": [0.8, 1.0],
+        },
+        "LightGBM": {
+            "n_estimators": [100, 200],
+            "num_leaves": [7, 15, 31],
+            "learning_rate": [0.03, 0.1],
+            "min_child_samples": [15, 30, 60],
+            "reg_lambda": [0.0, 1.0, 5.0],
+        },
+    }
+    return {prefix + name: values for name, values in spaces[model_name].items()}
+
+
+def run_model_experimentation(**kwargs):
+    """Public notebook entry point; orchestration is isolated in an importable src module."""
+    from src.experimentation import run_experiments
+
+    return run_experiments(**kwargs)
+
+
+def show_model_experimentation(**kwargs):
+    """Display artifact-backed comparisons, calibration plots, and shortlist."""
+    from src.experimentation import show_experimentation
+
+    return show_experimentation(**kwargs)
+
+
 if __name__ == "__main__":
-    train_baseline()
+    import argparse
+
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--experiments", action="store_true")
+    parser.add_argument("--include-text", action="store_true")
+    arguments = parser.parse_args()
+    if arguments.experiments:
+        run_model_experimentation(include_text=arguments.include_text)
+    else:
+        train_baseline(include_text=arguments.include_text)

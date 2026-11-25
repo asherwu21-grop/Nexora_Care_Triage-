@@ -1,0 +1,12 @@
+{
+  "forbidden_features": [],
+  "exact_training_target_copies": [],
+  "patient_overlap": false,
+  "strict_forward_cv": true,
+  "frozen_splits_unchanged": true,
+  "test_transformed": false,
+  "test_evaluated": false,
+  "near_perfect_trigger": 0.98,
+  "flagged_run_ids": [],
+  "source_label_provenance": "Earlier red-flag grouped-outcome separation remains unconfirmed; mechanistic checks cannot establish clinical validity"
+}

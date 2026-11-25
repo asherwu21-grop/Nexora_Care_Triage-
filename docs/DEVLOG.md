@@ -267,3 +267,88 @@
   reserved for the final phase. Source units/label-construction provenance and
   calibration/stability assessment remain future concerns. Existing dependency
   pins were unchanged; the required pinned sklearn/joblib versions were installed.
+
+
+## 2026-11-25 — Model experimentation, calibration and decision-rule comparisons
+
+- Read `AGENTS.md`. Added shared model/imbalance factories, fold-local multiclass
+  weighting, a timed imbalanced-learn pipeline, strict grouped forward CV, and
+  experiment notebook entry points in `src/train.py`. Added probability alignment,
+  Brier/log-loss accounting and explicit cost/threshold decisions in `src/evaluate.py`.
+  Orchestration, complete run logging, bootstrap uncertainty, plotting and written
+  ranking live in new `src/experimentation.py`.
+- Created/executed `notebooks/05_model_experimentation.ipynb`, added
+  `tests/test_model_experimentation.py`, and updated README setup and output guidance.
+  Installed existing pinned model dependencies. Both native boosters initially failed
+  to load without OpenMP; installed the required macOS runtime via approved Homebrew
+  action and documented `brew install libomp`. No Python dependency pins changed.
+- Compared every requested model/imbalance pair under the identical preprocessing
+  allowlist and frozen outer split. The latest session contains
+  25 defaults across the requested model families
+  and none/weights/oversampling/undersampling/SMOTE. Weights are computed inside each
+  fit, including XGBoost; no binary-only scale_pos_weight shortcut. Resampling only
+  occurs inside training pipelines. Standard SMOTE's fractional encoded values are
+  explicitly documented, not silently replaced with another algorithm.
+- Training/validation sizes from protocol: 10,366/1,179.
+  The frozen split and source fingerprints remain unchanged. No reserved-test
+  transformations, predictions, calibration, selection, or performance evaluation occurred.
+  Earlier full-cohort exploration and repeated validation-selection bias remain explicit.
+- Selected distinct leading default families for tuning:
+  ['default_LightGBM_class_weights', 'default_LogisticRegression_class_weights']. Used 3 patient-disjoint,
+  forward-only folds within training and 6 seeded search configurations
+  per selected family. Search refits by macro F1/High+Critical recall, never accuracy.
+  Every search/default CV fold stores a full confusion matrix/class report/error metrics
+  and probability metrics with measured fit/score time, rather than aggregate scores alone.
+- Calibration uses training forward-fold ensembles for sigmoid and isotonic and a
+  matching uncalibrated ensemble control. Checked that both methods' base ensemble
+  probabilities match before reusing that control. Full-training and fold-ensemble
+  training sizes differ; controls prevent attributing ensembling changes to calibration.
+  Decision scenarios use predefined illustrative under-triage costs and class thresholds;
+  their Brier scores stay unchanged because the probability source is unchanged.
+- Stability includes training-CV means/SDs for default/tuned base configurations and
+  200 patient-cluster validation resamples conditional on
+  fixed predictions. These are not refit/seed variability or post-selection intervals.
+  Calibration/policy rows label inherited CV statistics as applying to the base model.
+- Wrote `artifacts/model_comparison.csv`, `tuning_comparison.csv`, `model_rankings.csv`,
+  `model_shortlist.csv`, and the artifact-backed written `model_shortlist.md`.
+  `artifacts/experiments/` contains per-run JSON metrics, CV request IDs, version/code
+  fingerprints, protocol snapshots, calibration HTML/JSON/PNG and bin counts,
+  validation probabilities, leakage audit, model registry, notebook and verification
+  reports. Selected fitted default/tuned/calibrated models are in `models/` (Git ignored).
+- Run logging preserves earlier sessions. Latest session 3:
+  103 rows; all retained sessions: 309 rows.
+  Latest stage counts: {'search_cv': 36, 'default': 25, 'decision': 16, 'calibration_base_cv': 12, 'default_cv': 6, 'calibrated': 4, 'tuned': 2, 'ensemble_control': 2}. Calibration parent runtimes include
+  their base fits, so summing every row would double-count work. Parameter records
+  preserve scalar settings, use repr for estimators, and explicitly encode nonfinite
+  library defaults as strings. Session-scoped metric files avoid overwrite collisions.
+- Tuned/default comparisons read from the tuning artifact (improvement was not assumed):
+  - LightGBM: default/tuned validation macro F1 0.713130/0.680605; default/tuned HC recall 0.734101/0.718748.
+  - LogisticRegression: default/tuned validation macro F1 0.688829/0.687283; default/tuned HC recall 0.702615/0.698952.
+- Current ranked shortlist read from its artifact:
+  - Rank 1: default_LightGBM_class_weights; High/Critical recall 0.670330/0.797872; under/severe/over rates 0.145886/0.007634/0.138253; macro F1 0.713130; Brier 0.414451.
+  - Rank 2: calibrated_LogisticRegression_isotonic_cost2; High/Critical recall 0.677656/0.829787; under/severe/over rates 0.092451/0.004241/0.256149; macro F1 0.655865; Brier 0.414395.
+  - Rank 3: default_LightGBM_random_oversampling; High/Critical recall 0.677656/0.765957; under/severe/over rates 0.150127/0.010178/0.134860; macro F1 0.712592; Brier 0.414944.
+  - Rank 4: calibrated_LogisticRegression_sigmoid_threshold; High/Critical recall 0.611722/0.851064; under/severe/over rates 0.120441/0.007634/0.201866; macro F1 0.662511; Brier 0.415079.
+  - Rank 5: uncalibrated_ensemble_LogisticRegression; High/Critical recall 0.600733/0.829787; under/severe/over rates 0.133164/0.009330/0.157761; macro F1 0.694460; Brier 0.427417.
+  The top cost-policy alternative lowers under-triage but increases over-triage and
+  lowers macro F1. Rankings use explicit illustrative preferences, not clinical utility
+  estimates. Related model/policy rows are not independent confirmations of performance.
+- Leakage audit: forbidden features []; exact training-target
+  copies []; near-perfect-score flags
+  []. None triggered the aggregate near-perfect threshold, so
+  a permutation control was not required on these data. Structural checks cover
+  patient/time separation, frozen inputs, column allowlist and fit-only resampling.
+  Source-label provenance remains unconfirmed; these checks do not establish clinical validity.
+- Verification from `artifacts/experiments/checks.json`: Ruff passed; pytest result
+  58 passed in 4.72s. Notebook executed
+  2 code cells and displayed
+  2 reliability figures. Inspected both exported
+  PNGs and fixed legend overlap and inconsistent per-panel method colours through a
+  shared plotting helper. Repeated-session metrics reproduced within numerical
+  tolerance: True.
+- Open limitations: adaptive validation selection; earlier whole-cohort EDA; unknown
+  label derivation; interpolation of categorical/ordinal encodings by standard SMOTE;
+  sparse calibration bins and isotonic instability; fixed-prediction bootstrap rather
+  than training-resampling stability; illustrative decision costs requiring independent
+  domain review. Experimental output is not a clinical decision. Final test evaluation
+  remains deferred.

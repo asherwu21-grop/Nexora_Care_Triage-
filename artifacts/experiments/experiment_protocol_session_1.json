@@ -1,0 +1,29 @@
+{
+  "seed": 42,
+  "n_train": 10366,
+  "n_validation": 1179,
+  "frozen_split_sha256": "4388e87f4378038aa6c39054f917b15fc8ed85072bb7177d90ff33239cbb351b",
+  "source_dataset_sha256": "6747aa982cdb216f09a5d6c726da3cbb2ed05d4182b671ac26431535885d4f28",
+  "include_text": false,
+  "n_iter": 6,
+  "selected_default_run_ids": [
+    "default_LightGBM_class_weights",
+    "default_LogisticRegression_class_weights"
+  ],
+  "cv_folds": 3,
+  "cv_scoring": ".4 macro F1 + .6 mean High/Critical recall; no accuracy objective",
+  "cv_strategy": "Expanding chronological prefixes with validation patients excluded from each fit prefix",
+  "calibration": "Sigmoid and isotonic ensembles, fitted/calibrated inside training forward folds only; matching uncalibrated fold ensembles logged",
+  "runtime_accounting": "Each fit/scoring interval measured; calibration parent runtimes include base-fit components, so rows are not all additive",
+  "bootstrap": "200 patient-cluster resamples conditional on fixed validation predictions, common seed",
+  "smote_limitation": "Interpolates encoded ordinal and binary features into fractional values; not category-aware SMOTE",
+  "class_weights": "Balanced multiclass sample weights computed inside every classifier fit, including XGBoost",
+  "decision_rules": "Prespecified illustrative under-cost multipliers and High/Critical thresholds; no clinical-utility claim",
+  "holdout": "The full labelled cohort was explored in earlier EDA/hypothesis analyses. This is a newly reserved modelling holdout, not fully blinded to prior exploration. No baseline model transform, prediction, evaluation, or tuning uses test requests.",
+  "adaptive_validation": "Validation used repeatedly for development/ranking; shortlist estimates are selection-biased",
+  "test_transformed": false,
+  "test_evaluated": false,
+  "fit_warnings": [],
+  "total_wall_seconds": 42.629942832980305,
+  "safety_notice": "Experimental output. Not a clinical decision."
+}

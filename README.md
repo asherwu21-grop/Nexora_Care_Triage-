@@ -5,8 +5,8 @@ Experimental decision support for estimating telemedicine request urgency.
 **Experimental output. Not a clinical decision.**
 
 Data ingestion, profiling, cleaning, integration, deterministic feature engineering,
-exploratory analysis, statistical hypothesis tests, and a logistic regression baseline
-with validation evaluation are implemented. Final test evaluation, explainability,
+exploratory analysis, statistical hypothesis tests, baseline training, model experiments,
+and calibration with validation evaluation are implemented. Final test evaluation, explainability,
 and dashboard views are not implemented.
 
 ## Setup
@@ -155,3 +155,40 @@ computed. Earlier full-cohort EDA/hypothesis testing means the newly reserved
 holdout is not fully blinded to previous exploration. Retain it for final model
 evaluation. Review High/Critical recall and under-triage before aggregate accuracy;
 experimental model output is not a clinical decision.
+
+## Model experimentation
+
+Run `python -m src.train --experiments` or execute
+`notebooks/05_model_experimentation.ipynb` from the repository root. On macOS,
+XGBoost and LightGBM require the OpenMP runtime (`brew install libomp`). Their
+Python versions and imbalanced-learn are already pinned in `requirements.txt`.
+
+The workflow loads the existing frozen split, compares every requested model and
+imbalance strategy, and uses patient-disjoint forward-in-time folds within training
+for search and calibration. The tuning objective combines macro F1 and High/Critical
+recall. Class weights are fold-local multiclass sample weights; random resampling
+and SMOTE occur inside fit pipelines only. Standard SMOTE can create fractional
+ordinal/binary/one-hot values, which is documented as a limitation.
+
+Selected families receive default-versus-tuned comparisons, sigmoid/isotonic
+calibration with matching uncalibrated ensemble controls, and predefined cost and
+class-threshold decision scenarios. Probability quality uses one-vs-rest reliability
+curves, log loss, and multiclass Brier (sum over classes, range zero to two).
+Patient-cluster bootstrap intervals describe fixed validation predictions;
+training CV variation is reported separately for the uncalibrated base models.
+The costs and ranking weights are illustrative development preferences.
+
+`artifacts/model_comparison.csv` retains all run sessions, including individual
+CV candidate/fold fits, full metrics in JSON, parameters, preprocessing flags, and
+measured runtimes. Per-run JSON files live in `artifacts/experiments/metrics/`.
+Latest-session reports include `tuning_comparison.csv`, `model_rankings.csv`,
+`model_shortlist.csv`, and the written `model_shortlist.md`. The experiments
+directory also holds CV request IDs, version/code fingerprints, calibration
+HTML/JSON/bin tables and PNGs, validation probabilities, a model registry, and a
+leakage audit. Selected default, tuned, and calibrated models are saved in `models/`.
+
+No test prediction or evaluation occurs. Repeated validation reuse makes this a
+development shortlist, with selection bias and the earlier full-cohort exploration
+limitation stated explicitly. Near-perfect aggregate scores trigger structural and
+permuted-target checks before publication; uncertain label provenance remains a
+separate limitation even when mechanical checks pass.

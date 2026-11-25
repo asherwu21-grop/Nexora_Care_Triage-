@@ -1,0 +1,10 @@
+{
+  "calibrated_LightGBM_isotonic": "models/calibrated_LightGBM_isotonic.joblib",
+  "calibrated_LightGBM_sigmoid": "models/calibrated_LightGBM_sigmoid.joblib",
+  "calibrated_LogisticRegression_isotonic": "models/calibrated_LogisticRegression_isotonic.joblib",
+  "calibrated_LogisticRegression_sigmoid": "models/calibrated_LogisticRegression_sigmoid.joblib",
+  "default_LightGBM_class_weights": "models/default_LightGBM_class_weights.joblib",
+  "default_LogisticRegression_class_weights": "models/default_LogisticRegression_class_weights.joblib",
+  "tuned_LightGBM_class_weights": "models/tuned_LightGBM_class_weights.joblib",
+  "tuned_LogisticRegression_class_weights": "models/tuned_LogisticRegression_class_weights.joblib"
+}

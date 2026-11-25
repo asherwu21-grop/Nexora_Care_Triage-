@@ -1,0 +1,10 @@
+{
+  "status": "passed",
+  "notebook": "notebooks/05_model_experimentation.ipynb",
+  "executed_code_cells": 2,
+  "plotly_outputs": 2,
+  "frozen_splits_unchanged": true,
+  "test_evaluated": false,
+  "session_id": 3,
+  "logged_runs_current_session": 103
+}

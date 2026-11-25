@@ -1,0 +1,50 @@
+{
+  "session_id": 3,
+  "current_runs": 103,
+  "all_logged_runs": 309,
+  "stage_counts": {
+    "search_cv": 36,
+    "default": 25,
+    "decision": 16,
+    "calibration_base_cv": 12,
+    "default_cv": 6,
+    "calibrated": 4,
+    "tuned": 2,
+    "ensemble_control": 2
+  },
+  "all_25_default_combinations": true,
+  "complete_metrics_and_measured_runtime": true,
+  "cv_patient_overlap": false,
+  "cv_strict_chronology": true,
+  "frozen_split_and_dataset_unchanged": true,
+  "validation_probability_ids_only": true,
+  "test_evaluated": false,
+  "decision_rules_preserve_probability_scores": true,
+  "previous_session_metrics_reproduced": true,
+  "notebook": {
+    "status": "passed",
+    "notebook": "notebooks/05_model_experimentation.ipynb",
+    "executed_code_cells": 2,
+    "plotly_outputs": 2,
+    "frozen_splits_unchanged": true,
+    "test_evaluated": false,
+    "session_id": 3,
+    "logged_runs_current_session": 103
+  },
+  "visual_review": "Both calibration PNGs inspected; shared method colours, non-overlapping legend, labelled axes and bin support verified",
+  "ruff": {
+    "command": ".venv/bin/ruff check .",
+    "exit_code": 0,
+    "output": "All checks passed!\n"
+  },
+  "pytest": {
+    "command": ".venv/bin/pytest -q",
+    "exit_code": 0,
+    "output": "..........................................................               [100%]\n58 passed in 4.72s\n"
+  },
+  "diff_check": {
+    "command": "git diff --check",
+    "exit_code": 0,
+    "output": ""
+  }
+}

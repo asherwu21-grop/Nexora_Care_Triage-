@@ -134,3 +134,78 @@ def evaluate_predictions(
     if output_path is not None:
         write_json(Path(output_path), metrics)
     return metrics
+
+
+def aligned_probabilities(estimator, X) -> np.ndarray:
+    """Canonical ordinal-code probability columns, checked and normalised for rounding."""
+    classes = list(estimator.classes_)
+    if set(classes) != set(range(len(URGENCY_ORDER))):
+        raise ValueError("Experiment probabilities require fixed ordinal-code classes 0..3")
+    probabilities = np.asarray(estimator.predict_proba(X), dtype=float)
+    probabilities = probabilities[:, [classes.index(index) for index in range(4)]]
+    if not np.isfinite(probabilities).all() or (probabilities < 0).any():
+        raise ValueError("Non-finite or negative probabilities")
+    totals = probabilities.sum(axis=1, keepdims=True)
+    if not np.allclose(totals, 1, atol=1e-5):
+        raise ValueError("Probability rows must sum to one")
+    return probabilities / totals
+
+
+def probability_metrics(y, probabilities: np.ndarray) -> dict:
+    """Multiclass Brier is sum of squared class errors (0..2), not divided by classes."""
+    from sklearn.metrics import log_loss
+
+    y = np.asarray(y)
+    probabilities = np.asarray(probabilities, dtype=float)
+    if y.ndim != 1 or not len(y) or not np.isin(y, range(4)).all():
+        raise ValueError("Probability targets must be nonempty ordinal codes 0..3")
+    if probabilities.shape != (len(y), 4) or not np.isfinite(probabilities).all():
+        raise ValueError("Expected finite N by four probabilities")
+    if (probabilities < 0).any() or not np.allclose(probabilities.sum(axis=1), 1, atol=1e-5):
+        raise ValueError("Invalid probability rows")
+    errors = (probabilities - np.eye(4)[y.astype(int)]) ** 2
+    return {
+        "brier_multiclass": float(errors.sum(axis=1).mean()),
+        "brier_mean_ovr": float(errors.mean()),
+        "brier_per_class": {
+            label: float(errors[:, index].mean()) for index, label in enumerate(URGENCY_ORDER)
+        },
+        "log_loss": float(log_loss(y, probabilities, labels=list(range(4)))),
+    }
+
+
+def under_triage_cost_matrix(under_penalty: float = 2.0, severe_extra: float = 3.0) -> np.ndarray:
+    """Illustrative ordinal costs: rows=true, columns=action; not clinical utilities."""
+    if under_penalty < 1 or severe_extra < 0:
+        raise ValueError("Under-triage penalties must be >=1 and severe extra >=0")
+    true, action = np.indices((4, 4))
+    cost = np.where(action < true, under_penalty * (true - action), action - true).astype(float)
+    severe = ((true == 3) & (action <= 1)) | ((true == 2) & (action == 0))
+    return cost + severe_extra * severe
+
+
+def probability_decision(probabilities: np.ndarray, rule: str = "argmax", **params) -> np.ndarray:
+    """Prespecified development decision rules; larger costs favour avoiding under-triage."""
+    probabilities = np.asarray(probabilities, dtype=float)
+    if probabilities.ndim != 2 or probabilities.shape[1] != 4:
+        raise ValueError("Decision input must have four probability columns")
+    if (
+        not np.isfinite(probabilities).all()
+        or (probabilities < 0).any()
+        or not np.allclose(probabilities.sum(axis=1), 1, atol=1e-5)
+    ):
+        raise ValueError("Invalid probability rows")
+    if rule == "argmax":
+        return probabilities.argmax(axis=1)
+    if rule == "cost":
+        costs = under_triage_cost_matrix(**params)
+        return (probabilities @ costs).argmin(axis=1)
+    if rule == "threshold":
+        critical = params.get("critical_threshold", 0.20)
+        high = params.get("high_threshold", 0.30)
+        if not (0 < critical < 1 and 0 < high < 1):
+            raise ValueError("Thresholds must lie between zero and one")
+        predicted = probabilities.argmax(axis=1)
+        predicted = np.where((probabilities[:, 2] >= high) & (predicted < 2), 2, predicted)
+        return np.where(probabilities[:, 3] >= critical, 3, predicted)
+    raise ValueError("Unknown decision rule")

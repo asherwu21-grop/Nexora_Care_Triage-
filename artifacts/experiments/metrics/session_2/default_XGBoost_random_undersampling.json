@@ -1,0 +1,155 @@
+{
+  "evaluation_split": "validation",
+  "n_evaluated": 1179,
+  "urgency_order": [
+    "Low",
+    "Moderate",
+    "High",
+    "Critical"
+  ],
+  "accuracy": 0.6590330788804071,
+  "balanced_accuracy": 0.6820704921186969,
+  "macro_f1": 0.6551110189318166,
+  "weighted_f1": 0.6580035705886228,
+  "classification_report": {
+    "Low": {
+      "precision": 0.7552941176470588,
+      "recall": 0.75,
+      "f1-score": 0.7526377491207503,
+      "support": 428.0
+    },
+    "Moderate": {
+      "precision": 0.5837696335078534,
+      "recall": 0.5807291666666666,
+      "f1-score": 0.5822454308093995,
+      "support": 384.0
+    },
+    "High": {
+      "precision": 0.6595744680851063,
+      "recall": 0.5677655677655677,
+      "f1-score": 0.610236220472441,
+      "support": 273.0
+    },
+    "Critical": {
+      "precision": 0.5693430656934306,
+      "recall": 0.8297872340425532,
+      "f1-score": 0.6753246753246753,
+      "support": 94.0
+    },
+    "accuracy": 0.6590330788804071,
+    "macro avg": {
+      "precision": 0.6419953212333622,
+      "recall": 0.6820704921186969,
+      "f1-score": 0.6551110189318166,
+      "support": 1179.0
+    },
+    "weighted avg": {
+      "precision": 0.6624389309434888,
+      "recall": 0.6590330788804071,
+      "f1-score": 0.6580035705886228,
+      "support": 1179.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      321,
+      99,
+      8,
+      0
+    ],
+    [
+      96,
+      223,
+      60,
+      5
+    ],
+    [
+      8,
+      56,
+      155,
+      54
+    ],
+    [
+      0,
+      4,
+      12,
+      78
+    ]
+  ],
+  "confusion_matrix_orientation": "Rows=true, columns=predicted, both in urgency_order",
+  "triage_errors": {
+    "n": 1179,
+    "correct_count": 777,
+    "under_triage_count": 176,
+    "under_triage_rate": 0.14927905004240882,
+    "over_triage_count": 226,
+    "over_triage_rate": 0.19168787107718405,
+    "severe_under_triage_count": 12,
+    "severe_under_triage_rate": 0.010178117048346057,
+    "severe_under_triage_breakdown": {
+      "Critical_to_Low": 0,
+      "Critical_to_Moderate": 4,
+      "High_to_Low": 8
+    },
+    "high_or_critical_support": 367,
+    "severe_under_triage_rate_among_high_or_critical": 0.0326975476839237,
+    "rate_denominators": {
+      "overall": "All evaluated requests",
+      "per_true_class": "Requests whose true label is the named class; null if absent",
+      "severe_among_high_or_critical": "Requests truly High or Critical; null if absent"
+    },
+    "per_true_class": {
+      "Low": {
+        "support": 428,
+        "under_triage_count": 0,
+        "under_triage_rate": 0.0,
+        "over_triage_count": 107,
+        "over_triage_rate": 0.25,
+        "severe_under_triage_count": 0,
+        "severe_under_triage_rate": 0.0
+      },
+      "Moderate": {
+        "support": 384,
+        "under_triage_count": 96,
+        "under_triage_rate": 0.25,
+        "over_triage_count": 65,
+        "over_triage_rate": 0.16927083333333334,
+        "severe_under_triage_count": 0,
+        "severe_under_triage_rate": 0.0
+      },
+      "High": {
+        "support": 273,
+        "under_triage_count": 64,
+        "under_triage_rate": 0.23443223443223443,
+        "over_triage_count": 54,
+        "over_triage_rate": 0.1978021978021978,
+        "severe_under_triage_count": 8,
+        "severe_under_triage_rate": 0.029304029304029304
+      },
+      "Critical": {
+        "support": 94,
+        "under_triage_count": 16,
+        "under_triage_rate": 0.1702127659574468,
+        "over_triage_count": 0,
+        "over_triage_rate": 0.0,
+        "severe_under_triage_count": 4,
+        "severe_under_triage_rate": 0.0425531914893617
+      }
+    }
+  },
+  "metric_conventions": "All four labels in F1/report/confusion matrix; undefined precision/recall/F1=0. Balanced accuracy averages recall over present true classes. No class weights applied to evaluation metrics.",
+  "safety_notice": "Experimental output. Not a clinical decision.",
+  "brier_multiclass": 0.47716836094744325,
+  "brier_mean_ovr": 0.11929209023686081,
+  "brier_per_class": {
+    "Low": 0.12630480363286622,
+    "Moderate": 0.18822138959249907,
+    "High": 0.11674449560044783,
+    "Critical": 0.04589767212163013
+  },
+  "log_loss": 0.8271356073253069,
+  "high_recall": 0.5677655677655677,
+  "critical_recall": 0.8297872340425532,
+  "high_critical_recall": 0.6987764009040605,
+  "reference_cost": 0.5521628498727735
+}
