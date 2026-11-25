@@ -14,3 +14,6 @@ joblib==1.4.2
 streamlit==1.44.1
 pytest==8.3.5
 ruff==0.15.1
+ipykernel==6.29.5
+nbclient==0.10.2
+nbformat==5.10.4

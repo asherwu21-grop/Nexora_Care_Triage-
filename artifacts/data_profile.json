@@ -1,0 +1,2506 @@
+{
+  "intake": {
+    "shape": [
+      15085,
+      23
+    ],
+    "dtypes": {
+      "request_id": "object",
+      "patient_id": "object",
+      "date_of_birth": "object",
+      "sex": "object",
+      "pregnancy_flag": "object",
+      "chief_complaint_category": "object",
+      "reported_symptoms": "object",
+      "symptom_severity": "object",
+      "symptom_duration": "int64",
+      "symptom_onset": "object",
+      "pain_level": "object",
+      "medical_history": "object",
+      "current_medications": "object",
+      "red_flags": "object",
+      "comorbidities": "object",
+      "systolic_bp": "float64",
+      "diastolic_bp": "float64",
+      "body_temperature": "float64",
+      "heart_rate": "float64",
+      "respiratory_rate": "float64",
+      "oxygen_saturation": "float64",
+      "symptom_description": "object",
+      "request_timestamp": "object"
+    },
+    "missingness": {
+      "request_id": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "patient_id": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "date_of_birth": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "sex": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "pregnancy_flag": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "chief_complaint_category": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "reported_symptoms": {
+        "count": 275,
+        "fraction": 0.018230029830957905
+      },
+      "symptom_severity": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "symptom_duration": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "symptom_onset": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "pain_level": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "medical_history": {
+        "count": 457,
+        "fraction": 0.030294995028173684
+      },
+      "current_medications": {
+        "count": 419,
+        "fraction": 0.027775936360623137
+      },
+      "red_flags": {
+        "count": 267,
+        "fraction": 0.017699701690420948
+      },
+      "comorbidities": {
+        "count": 301,
+        "fraction": 0.019953596287703015
+      },
+      "systolic_bp": {
+        "count": 1002,
+        "fraction": 0.0664235996022539
+      },
+      "diastolic_bp": {
+        "count": 1002,
+        "fraction": 0.0664235996022539
+      },
+      "body_temperature": {
+        "count": 638,
+        "fraction": 0.04229366920782234
+      },
+      "heart_rate": {
+        "count": 389,
+        "fraction": 0.025787205833609547
+      },
+      "respiratory_rate": {
+        "count": 943,
+        "fraction": 0.06251242956579384
+      },
+      "oxygen_saturation": {
+        "count": 958,
+        "fraction": 0.06350679482930063
+      },
+      "symptom_description": {
+        "count": 457,
+        "fraction": 0.030294995028173684
+      },
+      "request_timestamp": {
+        "count": 0,
+        "fraction": 0.0
+      }
+    },
+    "duplicate_rows": 0,
+    "duplicate_request_ids": 0,
+    "unique_patients": 9912,
+    "value_count_limit": 20,
+    "value_counts": {
+      "request_id": {
+        "unique_nonmissing": 15085,
+        "top_values": [
+          {
+            "value": "REQ-000001",
+            "count": 1
+          },
+          {
+            "value": "REQ-010062",
+            "count": 1
+          },
+          {
+            "value": "REQ-010050",
+            "count": 1
+          },
+          {
+            "value": "REQ-010051",
+            "count": 1
+          },
+          {
+            "value": "REQ-010052",
+            "count": 1
+          },
+          {
+            "value": "REQ-010053",
+            "count": 1
+          },
+          {
+            "value": "REQ-010054",
+            "count": 1
+          },
+          {
+            "value": "REQ-010055",
+            "count": 1
+          },
+          {
+            "value": "REQ-010056",
+            "count": 1
+          },
+          {
+            "value": "REQ-010057",
+            "count": 1
+          },
+          {
+            "value": "REQ-010058",
+            "count": 1
+          },
+          {
+            "value": "REQ-010059",
+            "count": 1
+          },
+          {
+            "value": "REQ-010060",
+            "count": 1
+          },
+          {
+            "value": "REQ-010061",
+            "count": 1
+          },
+          {
+            "value": "REQ-010063",
+            "count": 1
+          },
+          {
+            "value": "REQ-010077",
+            "count": 1
+          },
+          {
+            "value": "REQ-010064",
+            "count": 1
+          },
+          {
+            "value": "REQ-010065",
+            "count": 1
+          },
+          {
+            "value": "REQ-010066",
+            "count": 1
+          },
+          {
+            "value": "REQ-010067",
+            "count": 1
+          }
+        ],
+        "missing_count": 0,
+        "truncated": true
+      },
+      "patient_id": {
+        "unique_nonmissing": 9912,
+        "top_values": [
+          {
+            "value": "PAT-09269",
+            "count": 8
+          },
+          {
+            "value": "PAT-09404",
+            "count": 8
+          },
+          {
+            "value": "PAT-07160",
+            "count": 7
+          },
+          {
+            "value": "PAT-04414",
+            "count": 7
+          },
+          {
+            "value": "PAT-08226",
+            "count": 7
+          },
+          {
+            "value": "PAT-09332",
+            "count": 7
+          },
+          {
+            "value": "PAT-00731",
+            "count": 7
+          },
+          {
+            "value": "PAT-01729",
+            "count": 7
+          },
+          {
+            "value": "PAT-07205",
+            "count": 7
+          },
+          {
+            "value": "PAT-08493",
+            "count": 6
+          },
+          {
+            "value": "PAT-02179",
+            "count": 6
+          },
+          {
+            "value": "PAT-07943",
+            "count": 6
+          },
+          {
+            "value": "PAT-05338",
+            "count": 6
+          },
+          {
+            "value": "PAT-09058",
+            "count": 6
+          },
+          {
+            "value": "PAT-05078",
+            "count": 6
+          },
+          {
+            "value": "PAT-04359",
+            "count": 6
+          },
+          {
+            "value": "PAT-05977",
+            "count": 6
+          },
+          {
+            "value": "PAT-01791",
+            "count": 6
+          },
+          {
+            "value": "PAT-09492",
+            "count": 6
+          },
+          {
+            "value": "PAT-07732",
+            "count": 6
+          }
+        ],
+        "missing_count": 0,
+        "truncated": true
+      },
+      "date_of_birth": {
+        "unique_nonmissing": 7349,
+        "top_values": [
+          {
+            "value": "1975-06-16",
+            "count": 13
+          },
+          {
+            "value": "1996-08-13",
+            "count": 12
+          },
+          {
+            "value": "1997-12-01",
+            "count": 11
+          },
+          {
+            "value": "1996-09-20",
+            "count": 10
+          },
+          {
+            "value": "1997-02-14",
+            "count": 10
+          },
+          {
+            "value": "1999-03-09",
+            "count": 10
+          },
+          {
+            "value": "2001-01-25",
+            "count": 10
+          },
+          {
+            "value": "2000-03-19",
+            "count": 10
+          },
+          {
+            "value": "1999-12-09",
+            "count": 9
+          },
+          {
+            "value": "1998-08-24",
+            "count": 9
+          },
+          {
+            "value": "1999-04-15",
+            "count": 9
+          },
+          {
+            "value": "1997-06-08",
+            "count": 9
+          },
+          {
+            "value": "1999-01-09",
+            "count": 9
+          },
+          {
+            "value": "1997-07-03",
+            "count": 9
+          },
+          {
+            "value": "2000-10-20",
+            "count": 9
+          },
+          {
+            "value": "1998-12-15",
+            "count": 9
+          },
+          {
+            "value": "1978-01-12",
+            "count": 9
+          },
+          {
+            "value": "1999-04-20",
+            "count": 9
+          },
+          {
+            "value": "1992-10-29",
+            "count": 8
+          },
+          {
+            "value": "1987-09-11",
+            "count": 8
+          }
+        ],
+        "missing_count": 0,
+        "truncated": true
+      },
+      "sex": {
+        "unique_nonmissing": 2,
+        "top_values": [
+          {
+            "value": "Female",
+            "count": 8256
+          },
+          {
+            "value": "Male",
+            "count": 6829
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "pregnancy_flag": {
+        "unique_nonmissing": 3,
+        "top_values": [
+          {
+            "value": "Not applicable",
+            "count": 9079
+          },
+          {
+            "value": "No",
+            "count": 5734
+          },
+          {
+            "value": "Yes",
+            "count": 272
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "chief_complaint_category": {
+        "unique_nonmissing": 15,
+        "top_values": [
+          {
+            "value": "Fever",
+            "count": 1973
+          },
+          {
+            "value": "Chronic Condition",
+            "count": 1912
+          },
+          {
+            "value": "Cough & Cold",
+            "count": 1609
+          },
+          {
+            "value": "Abdominal Pain",
+            "count": 1506
+          },
+          {
+            "value": "Other",
+            "count": 1128
+          },
+          {
+            "value": "Headache",
+            "count": 1067
+          },
+          {
+            "value": "Muscle & Joint Pain",
+            "count": 1031
+          },
+          {
+            "value": "Breathing Difficulty",
+            "count": 811
+          },
+          {
+            "value": "Skin Rash",
+            "count": 809
+          },
+          {
+            "value": "Chest Pain",
+            "count": 774
+          },
+          {
+            "value": "ENT & Eye",
+            "count": 653
+          },
+          {
+            "value": "Urinary Problem",
+            "count": 638
+          },
+          {
+            "value": "Injury",
+            "count": 546
+          },
+          {
+            "value": "Mental Health",
+            "count": 544
+          },
+          {
+            "value": "Pregnancy",
+            "count": 84
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "reported_symptoms": {
+        "unique_nonmissing": 142,
+        "top_values": [
+          {
+            "value": "dizziness",
+            "count": 622
+          },
+          {
+            "value": "nausea",
+            "count": 601
+          },
+          {
+            "value": "tiredness",
+            "count": 362
+          },
+          {
+            "value": "frequent urination",
+            "count": 355
+          },
+          {
+            "value": "headache",
+            "count": 337
+          },
+          {
+            "value": "cough",
+            "count": 322
+          },
+          {
+            "value": "chest tightness",
+            "count": 291
+          },
+          {
+            "value": "sore throat",
+            "count": 289
+          },
+          {
+            "value": "vomiting",
+            "count": 275
+          },
+          {
+            "value": "fatigue",
+            "count": 267
+          },
+          {
+            "value": "high blood pressure reading",
+            "count": 253
+          },
+          {
+            "value": "high blood sugar reading",
+            "count": 235
+          },
+          {
+            "value": "medication refill",
+            "count": 228
+          },
+          {
+            "value": "sneezing",
+            "count": 221
+          },
+          {
+            "value": "blurred vision",
+            "count": 213
+          },
+          {
+            "value": "loss of appetite",
+            "count": 203
+          },
+          {
+            "value": "mild fever",
+            "count": 200
+          },
+          {
+            "value": "shortness of breath",
+            "count": 200
+          },
+          {
+            "value": "blocked nose",
+            "count": 198
+          },
+          {
+            "value": "itching",
+            "count": 198
+          }
+        ],
+        "missing_count": 275,
+        "truncated": true
+      },
+      "symptom_severity": {
+        "unique_nonmissing": 3,
+        "top_values": [
+          {
+            "value": "Mild",
+            "count": 6511
+          },
+          {
+            "value": "Moderate",
+            "count": 5081
+          },
+          {
+            "value": "Severe",
+            "count": 3493
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "symptom_duration": {
+        "unique_nonmissing": 9183,
+        "top_values": [
+          {
+            "value": "10368000",
+            "count": 21
+          },
+          {
+            "value": "7320",
+            "count": 12
+          },
+          {
+            "value": "9120",
+            "count": 12
+          },
+          {
+            "value": "3900",
+            "count": 11
+          },
+          {
+            "value": "9000",
+            "count": 11
+          },
+          {
+            "value": "8640",
+            "count": 11
+          },
+          {
+            "value": "8220",
+            "count": 10
+          },
+          {
+            "value": "6480",
+            "count": 10
+          },
+          {
+            "value": "13680",
+            "count": 10
+          },
+          {
+            "value": "9660",
+            "count": 9
+          },
+          {
+            "value": "15000",
+            "count": 9
+          },
+          {
+            "value": "15720",
+            "count": 9
+          },
+          {
+            "value": "4680",
+            "count": 9
+          },
+          {
+            "value": "6120",
+            "count": 9
+          },
+          {
+            "value": "4200",
+            "count": 9
+          },
+          {
+            "value": "11100",
+            "count": 9
+          },
+          {
+            "value": "8460",
+            "count": 9
+          },
+          {
+            "value": "98100",
+            "count": 9
+          },
+          {
+            "value": "7740",
+            "count": 9
+          },
+          {
+            "value": "6600",
+            "count": 9
+          }
+        ],
+        "missing_count": 0,
+        "truncated": true
+      },
+      "symptom_onset": {
+        "unique_nonmissing": 3,
+        "top_values": [
+          {
+            "value": "Gradual",
+            "count": 8120
+          },
+          {
+            "value": "Sudden",
+            "count": 5824
+          },
+          {
+            "value": "Recurring",
+            "count": 1141
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "pain_level": {
+        "unique_nonmissing": 4,
+        "top_values": [
+          {
+            "value": "Mild",
+            "count": 6052
+          },
+          {
+            "value": "Moderate",
+            "count": 4707
+          },
+          {
+            "value": "No pain",
+            "count": 2835
+          },
+          {
+            "value": "Severe",
+            "count": 1491
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "medical_history": {
+        "unique_nonmissing": 748,
+        "top_values": [
+          {
+            "value": "No known history",
+            "count": 8148
+          },
+          {
+            "value": "peptic ulcer",
+            "count": 444
+          },
+          {
+            "value": "asthma since childhood",
+            "count": 441
+          },
+          {
+            "value": "typhoid last year",
+            "count": 323
+          },
+          {
+            "value": "previous surgery",
+            "count": 321
+          },
+          {
+            "value": "hospital admission in the last 6 months",
+            "count": 319
+          },
+          {
+            "value": "allergy to penicillin",
+            "count": 311
+          },
+          {
+            "value": "frequent migraines",
+            "count": 298
+          },
+          {
+            "value": "recurrent malaria",
+            "count": 282
+          },
+          {
+            "value": "appendectomy",
+            "count": 280
+          },
+          {
+            "value": "previous C-section",
+            "count": 146
+          },
+          {
+            "value": "chronic back problems",
+            "count": 96
+          },
+          {
+            "value": "hypertension diagnosed 5 years ago",
+            "count": 87
+          },
+          {
+            "value": "hypertension diagnosed 1 years ago",
+            "count": 85
+          },
+          {
+            "value": "hypertension diagnosed 9 years ago",
+            "count": 84
+          },
+          {
+            "value": "hypertension diagnosed 3 years ago",
+            "count": 80
+          },
+          {
+            "value": "hypertension diagnosed 6 years ago",
+            "count": 78
+          },
+          {
+            "value": "hypertension diagnosed 12 years ago",
+            "count": 77
+          },
+          {
+            "value": "sickle cell disease (HbSS)",
+            "count": 77
+          },
+          {
+            "value": "hypertension diagnosed 7 years ago",
+            "count": 73
+          }
+        ],
+        "missing_count": 457,
+        "truncated": true
+      },
+      "current_medications": {
+        "unique_nonmissing": 674,
+        "top_values": [
+          {
+            "value": "No current medication",
+            "count": 5873
+          },
+          {
+            "value": "paracetamol",
+            "count": 598
+          },
+          {
+            "value": "salbutamol inhaler",
+            "count": 450
+          },
+          {
+            "value": "ciprofloxacin",
+            "count": 314
+          },
+          {
+            "value": "amlodipine",
+            "count": 309
+          },
+          {
+            "value": "lisinopril",
+            "count": 298
+          },
+          {
+            "value": "antacid",
+            "count": 274
+          },
+          {
+            "value": "ibuprofen",
+            "count": 274
+          },
+          {
+            "value": "losartan",
+            "count": 266
+          },
+          {
+            "value": "hydrochlorothiazide",
+            "count": 242
+          },
+          {
+            "value": "artemether-lumefantrine",
+            "count": 224
+          },
+          {
+            "value": "beclomethasone inhaler",
+            "count": 199
+          },
+          {
+            "value": "multivitamin",
+            "count": 195
+          },
+          {
+            "value": "diclofenac",
+            "count": 191
+          },
+          {
+            "value": "cough syrup",
+            "count": 190
+          },
+          {
+            "value": "vitamin C",
+            "count": 181
+          },
+          {
+            "value": "amoxicillin",
+            "count": 180
+          },
+          {
+            "value": "herbal tea",
+            "count": 172
+          },
+          {
+            "value": "metformin",
+            "count": 166
+          },
+          {
+            "value": "glibenclamide",
+            "count": 163
+          }
+        ],
+        "missing_count": 419,
+        "truncated": true
+      },
+      "red_flags": {
+        "unique_nonmissing": 166,
+        "top_values": [
+          {
+            "value": "No red flags",
+            "count": 11196
+          },
+          {
+            "value": "Breathing difficulty",
+            "count": 655
+          },
+          {
+            "value": "Chest pain",
+            "count": 444
+          },
+          {
+            "value": "Confusion",
+            "count": 337
+          },
+          {
+            "value": "Severe bleeding",
+            "count": 288
+          },
+          {
+            "value": "Severe allergic reaction",
+            "count": 197
+          },
+          {
+            "value": "Seizure",
+            "count": 193
+          },
+          {
+            "value": "Thoughts of self-harm",
+            "count": 187
+          },
+          {
+            "value": "Stroke signs",
+            "count": 179
+          },
+          {
+            "value": "Loss of consciousness",
+            "count": 171
+          },
+          {
+            "value": "Breathing difficulty; Chest pain",
+            "count": 157
+          },
+          {
+            "value": "Breathing difficulty; Confusion",
+            "count": 56
+          },
+          {
+            "value": "Confusion; Severe bleeding",
+            "count": 33
+          },
+          {
+            "value": "Breathing difficulty; Severe bleeding",
+            "count": 33
+          },
+          {
+            "value": "Breathing difficulty; Loss of consciousness",
+            "count": 25
+          },
+          {
+            "value": "Confusion; Thoughts of self-harm",
+            "count": 24
+          },
+          {
+            "value": "Breathing difficulty; Severe allergic reaction",
+            "count": 24
+          },
+          {
+            "value": "Chest pain; Confusion",
+            "count": 23
+          },
+          {
+            "value": "Breathing difficulty; Thoughts of self-harm",
+            "count": 21
+          },
+          {
+            "value": "Chest pain; Loss of consciousness",
+            "count": 21
+          }
+        ],
+        "missing_count": 267,
+        "truncated": true
+      },
+      "comorbidities": {
+        "unique_nonmissing": 58,
+        "top_values": [
+          {
+            "value": "No known conditions",
+            "count": 8355
+          },
+          {
+            "value": "Hypertension",
+            "count": 2170
+          },
+          {
+            "value": "Asthma",
+            "count": 936
+          },
+          {
+            "value": "Diabetes",
+            "count": 932
+          },
+          {
+            "value": "Other chronic condition",
+            "count": 405
+          },
+          {
+            "value": "Sickle cell disease",
+            "count": 373
+          },
+          {
+            "value": "Hypertension; Diabetes",
+            "count": 321
+          },
+          {
+            "value": "HIV",
+            "count": 189
+          },
+          {
+            "value": "Heart disease",
+            "count": 165
+          },
+          {
+            "value": "Hypertension; Other chronic condition",
+            "count": 159
+          },
+          {
+            "value": "Hypertension; Asthma",
+            "count": 122
+          },
+          {
+            "value": "Hypertension; Heart disease",
+            "count": 84
+          },
+          {
+            "value": "Chronic kidney disease",
+            "count": 69
+          },
+          {
+            "value": "Hypertension; Chronic kidney disease",
+            "count": 43
+          },
+          {
+            "value": "Hypertension; Diabetes; Asthma",
+            "count": 38
+          },
+          {
+            "value": "Diabetes; Other chronic condition",
+            "count": 37
+          },
+          {
+            "value": "Asthma; Other chronic condition",
+            "count": 34
+          },
+          {
+            "value": "Hypertension; Sickle cell disease",
+            "count": 31
+          },
+          {
+            "value": "Hypertension; Diabetes; Other chronic condition",
+            "count": 25
+          },
+          {
+            "value": "Diabetes; Asthma",
+            "count": 24
+          }
+        ],
+        "missing_count": 301,
+        "truncated": true
+      },
+      "systolic_bp": {
+        "unique_nonmissing": 156,
+        "top_values": [
+          {
+            "value": "116.0",
+            "count": 338
+          },
+          {
+            "value": "114.0",
+            "count": 322
+          },
+          {
+            "value": "115.0",
+            "count": 314
+          },
+          {
+            "value": "113.0",
+            "count": 312
+          },
+          {
+            "value": "109.0",
+            "count": 312
+          },
+          {
+            "value": "112.0",
+            "count": 300
+          },
+          {
+            "value": "120.0",
+            "count": 298
+          },
+          {
+            "value": "119.0",
+            "count": 289
+          },
+          {
+            "value": "107.0",
+            "count": 289
+          },
+          {
+            "value": "106.0",
+            "count": 283
+          },
+          {
+            "value": "108.0",
+            "count": 282
+          },
+          {
+            "value": "110.0",
+            "count": 282
+          },
+          {
+            "value": "111.0",
+            "count": 279
+          },
+          {
+            "value": "117.0",
+            "count": 266
+          },
+          {
+            "value": "118.0",
+            "count": 265
+          },
+          {
+            "value": "124.0",
+            "count": 264
+          },
+          {
+            "value": "121.0",
+            "count": 263
+          },
+          {
+            "value": "122.0",
+            "count": 258
+          },
+          {
+            "value": "125.0",
+            "count": 257
+          },
+          {
+            "value": "126.0",
+            "count": 249
+          }
+        ],
+        "missing_count": 1002,
+        "truncated": true
+      },
+      "diastolic_bp": {
+        "unique_nonmissing": 113,
+        "top_values": [
+          {
+            "value": "76.0",
+            "count": 357
+          },
+          {
+            "value": "75.0",
+            "count": 357
+          },
+          {
+            "value": "74.0",
+            "count": 349
+          },
+          {
+            "value": "77.0",
+            "count": 347
+          },
+          {
+            "value": "73.0",
+            "count": 342
+          },
+          {
+            "value": "80.0",
+            "count": 342
+          },
+          {
+            "value": "83.0",
+            "count": 331
+          },
+          {
+            "value": "81.0",
+            "count": 323
+          },
+          {
+            "value": "79.0",
+            "count": 321
+          },
+          {
+            "value": "78.0",
+            "count": 320
+          },
+          {
+            "value": "85.0",
+            "count": 317
+          },
+          {
+            "value": "70.0",
+            "count": 312
+          },
+          {
+            "value": "86.0",
+            "count": 310
+          },
+          {
+            "value": "71.0",
+            "count": 308
+          },
+          {
+            "value": "82.0",
+            "count": 306
+          },
+          {
+            "value": "72.0",
+            "count": 306
+          },
+          {
+            "value": "66.0",
+            "count": 304
+          },
+          {
+            "value": "68.0",
+            "count": 304
+          },
+          {
+            "value": "69.0",
+            "count": 300
+          },
+          {
+            "value": "84.0",
+            "count": 297
+          }
+        ],
+        "missing_count": 1002,
+        "truncated": true
+      },
+      "body_temperature": {
+        "unique_nonmissing": 58,
+        "top_values": [
+          {
+            "value": "37.0",
+            "count": 1117
+          },
+          {
+            "value": "36.9",
+            "count": 1071
+          },
+          {
+            "value": "37.1",
+            "count": 1041
+          },
+          {
+            "value": "36.8",
+            "count": 973
+          },
+          {
+            "value": "36.7",
+            "count": 960
+          },
+          {
+            "value": "37.2",
+            "count": 892
+          },
+          {
+            "value": "37.3",
+            "count": 865
+          },
+          {
+            "value": "36.6",
+            "count": 848
+          },
+          {
+            "value": "37.4",
+            "count": 735
+          },
+          {
+            "value": "37.5",
+            "count": 637
+          },
+          {
+            "value": "36.5",
+            "count": 592
+          },
+          {
+            "value": "37.6",
+            "count": 514
+          },
+          {
+            "value": "36.4",
+            "count": 452
+          },
+          {
+            "value": "37.7",
+            "count": 410
+          },
+          {
+            "value": "36.3",
+            "count": 340
+          },
+          {
+            "value": "37.8",
+            "count": 335
+          },
+          {
+            "value": "37.9",
+            "count": 287
+          },
+          {
+            "value": "36.2",
+            "count": 221
+          },
+          {
+            "value": "38.0",
+            "count": 213
+          },
+          {
+            "value": "38.2",
+            "count": 191
+          }
+        ],
+        "missing_count": 638,
+        "truncated": true
+      },
+      "heart_rate": {
+        "unique_nonmissing": 104,
+        "top_values": [
+          {
+            "value": "80.0",
+            "count": 1014
+          },
+          {
+            "value": "85.0",
+            "count": 1000
+          },
+          {
+            "value": "90.0",
+            "count": 887
+          },
+          {
+            "value": "75.0",
+            "count": 861
+          },
+          {
+            "value": "95.0",
+            "count": 735
+          },
+          {
+            "value": "70.0",
+            "count": 578
+          },
+          {
+            "value": "100.0",
+            "count": 528
+          },
+          {
+            "value": "105.0",
+            "count": 409
+          },
+          {
+            "value": "78.0",
+            "count": 298
+          },
+          {
+            "value": "65.0",
+            "count": 297
+          },
+          {
+            "value": "83.0",
+            "count": 293
+          },
+          {
+            "value": "81.0",
+            "count": 289
+          },
+          {
+            "value": "84.0",
+            "count": 270
+          },
+          {
+            "value": "88.0",
+            "count": 264
+          },
+          {
+            "value": "110.0",
+            "count": 263
+          },
+          {
+            "value": "82.0",
+            "count": 256
+          },
+          {
+            "value": "89.0",
+            "count": 246
+          },
+          {
+            "value": "87.0",
+            "count": 246
+          },
+          {
+            "value": "76.0",
+            "count": 245
+          },
+          {
+            "value": "86.0",
+            "count": 244
+          }
+        ],
+        "missing_count": 389,
+        "truncated": true
+      },
+      "respiratory_rate": {
+        "unique_nonmissing": 33,
+        "top_values": [
+          {
+            "value": "17.0",
+            "count": 1678
+          },
+          {
+            "value": "18.0",
+            "count": 1624
+          },
+          {
+            "value": "16.0",
+            "count": 1564
+          },
+          {
+            "value": "19.0",
+            "count": 1401
+          },
+          {
+            "value": "15.0",
+            "count": 1339
+          },
+          {
+            "value": "20.0",
+            "count": 1198
+          },
+          {
+            "value": "14.0",
+            "count": 1016
+          },
+          {
+            "value": "21.0",
+            "count": 837
+          },
+          {
+            "value": "13.0",
+            "count": 675
+          },
+          {
+            "value": "22.0",
+            "count": 574
+          },
+          {
+            "value": "12.0",
+            "count": 461
+          },
+          {
+            "value": "23.0",
+            "count": 405
+          },
+          {
+            "value": "24.0",
+            "count": 284
+          },
+          {
+            "value": "11.0",
+            "count": 238
+          },
+          {
+            "value": "25.0",
+            "count": 184
+          },
+          {
+            "value": "26.0",
+            "count": 123
+          },
+          {
+            "value": "10.0",
+            "count": 106
+          },
+          {
+            "value": "27.0",
+            "count": 93
+          },
+          {
+            "value": "29.0",
+            "count": 62
+          },
+          {
+            "value": "28.0",
+            "count": 60
+          }
+        ],
+        "missing_count": 943,
+        "truncated": true
+      },
+      "oxygen_saturation": {
+        "unique_nonmissing": 20,
+        "top_values": [
+          {
+            "value": "97.0",
+            "count": 3063
+          },
+          {
+            "value": "98.0",
+            "count": 2645
+          },
+          {
+            "value": "96.0",
+            "count": 2478
+          },
+          {
+            "value": "99.0",
+            "count": 1647
+          },
+          {
+            "value": "95.0",
+            "count": 1601
+          },
+          {
+            "value": "100.0",
+            "count": 853
+          },
+          {
+            "value": "94.0",
+            "count": 844
+          },
+          {
+            "value": "93.0",
+            "count": 367
+          },
+          {
+            "value": "92.0",
+            "count": 182
+          },
+          {
+            "value": "91.0",
+            "count": 93
+          },
+          {
+            "value": "90.0",
+            "count": 78
+          },
+          {
+            "value": "88.0",
+            "count": 69
+          },
+          {
+            "value": "89.0",
+            "count": 53
+          },
+          {
+            "value": "86.0",
+            "count": 51
+          },
+          {
+            "value": "87.0",
+            "count": 38
+          },
+          {
+            "value": "85.0",
+            "count": 36
+          },
+          {
+            "value": "84.0",
+            "count": 17
+          },
+          {
+            "value": "82.0",
+            "count": 6
+          },
+          {
+            "value": "83.0",
+            "count": 5
+          },
+          {
+            "value": "80.0",
+            "count": 1
+          }
+        ],
+        "missing_count": 958,
+        "truncated": false
+      },
+      "symptom_description": {
+        "unique_nonmissing": 5113,
+        "top_values": [
+          {
+            "value": "Not feeling well.",
+            "count": 190
+          },
+          {
+            "value": "Something is wrong, please call me.",
+            "count": 176
+          },
+          {
+            "value": "Feeling hot and weak with headache and chills, took paracetamol but the fever keeps coming back.",
+            "count": 175
+          },
+          {
+            "value": "Need consultation.",
+            "count": 168
+          },
+          {
+            "value": "Please I need to see a doctor.",
+            "count": 166
+          },
+          {
+            "value": "I want to talk to a doctor about my health.",
+            "count": 165
+          },
+          {
+            "value": "Help.",
+            "count": 162
+          },
+          {
+            "value": "Need medication refill, no new symptoms.",
+            "count": 157
+          },
+          {
+            "value": "Runny nose and mild cough since the weather changed.",
+            "count": 146
+          },
+          {
+            "value": "Blood pressure reading is a bit high this week, no symptoms.",
+            "count": 145
+          },
+          {
+            "value": "I have a dry cough and blocked nose, no serious fever.",
+            "count": 143
+          },
+          {
+            "value": "Routine review of sugar readings, feeling fine.",
+            "count": 138
+          },
+          {
+            "value": "Stomach pain and bloating after eating, no vomiting.",
+            "count": 128
+          },
+          {
+            "value": "Mild dizziness and headache after long hours of work.",
+            "count": 90
+          },
+          {
+            "value": "Knee pain when climbing stairs, no swelling.",
+            "count": 86
+          },
+          {
+            "value": "Neck and shoulder pain after sleeping badly.",
+            "count": 85
+          },
+          {
+            "value": "Throbbing headache with sensitivity to light, similar to past migraines.",
+            "count": 83
+          },
+          {
+            "value": "Dry skin patches and itching, been using cream.",
+            "count": 83
+          },
+          {
+            "value": "General weakness and poor appetite.",
+            "count": 76
+          },
+          {
+            "value": "Small boil on the thigh, slightly painful.",
+            "count": 69
+          }
+        ],
+        "missing_count": 457,
+        "truncated": true
+      },
+      "request_timestamp": {
+        "unique_nonmissing": 15080,
+        "top_values": [
+          {
+            "value": "2026-05-14 18:49:59",
+            "count": 2
+          },
+          {
+            "value": "2025-12-30 11:52:58",
+            "count": 2
+          },
+          {
+            "value": "2026-02-03 9:13:07",
+            "count": 2
+          },
+          {
+            "value": "2026-04-20 10:47:20",
+            "count": 2
+          },
+          {
+            "value": "2026-06-30 20:45:42",
+            "count": 2
+          },
+          {
+            "value": "2026-03-31 7:12:27",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 8:55:12",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 8:44:33",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 8:43:49",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 8:22:33",
+            "count": 1
+          },
+          {
+            "value": "2025-07-01 1:21:23",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:06:16",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 7:09:34",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 3:17:57",
+            "count": 1
+          },
+          {
+            "value": "2026-03-30 23:54:05",
+            "count": 1
+          },
+          {
+            "value": "2026-03-30 23:45:58",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:06:08",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:14:41",
+            "count": 1
+          },
+          {
+            "value": "2026-03-30 22:43:55",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:49:11",
+            "count": 1
+          }
+        ],
+        "missing_count": 0,
+        "truncated": true
+      }
+    }
+  },
+  "assessments": {
+    "shape": [
+      14809,
+      8
+    ],
+    "dtypes": {
+      "assessment_id": "object",
+      "request_id": "object",
+      "assessor_id": "object",
+      "clinical_urgency": "object",
+      "assessment_notes": "object",
+      "escalation_required": "object",
+      "assessment_timestamp": "object",
+      "triage_protocol": "object"
+    },
+    "missingness": {
+      "assessment_id": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "request_id": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "assessor_id": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "clinical_urgency": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "assessment_notes": {
+        "count": 1065,
+        "fraction": 0.07191572692281721
+      },
+      "escalation_required": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "assessment_timestamp": {
+        "count": 0,
+        "fraction": 0.0
+      },
+      "triage_protocol": {
+        "count": 0,
+        "fraction": 0.0
+      }
+    },
+    "duplicate_rows": 0,
+    "duplicate_request_ids": 0,
+    "unique_patients": null,
+    "value_count_limit": 20,
+    "value_counts": {
+      "assessment_id": {
+        "unique_nonmissing": 14809,
+        "top_values": [
+          {
+            "value": "ASM-000001",
+            "count": 1
+          },
+          {
+            "value": "ASM-009865",
+            "count": 1
+          },
+          {
+            "value": "ASM-009867",
+            "count": 1
+          },
+          {
+            "value": "ASM-009868",
+            "count": 1
+          },
+          {
+            "value": "ASM-009869",
+            "count": 1
+          },
+          {
+            "value": "ASM-009870",
+            "count": 1
+          },
+          {
+            "value": "ASM-009871",
+            "count": 1
+          },
+          {
+            "value": "ASM-009872",
+            "count": 1
+          },
+          {
+            "value": "ASM-009873",
+            "count": 1
+          },
+          {
+            "value": "ASM-009874",
+            "count": 1
+          },
+          {
+            "value": "ASM-009875",
+            "count": 1
+          },
+          {
+            "value": "ASM-009876",
+            "count": 1
+          },
+          {
+            "value": "ASM-009877",
+            "count": 1
+          },
+          {
+            "value": "ASM-009878",
+            "count": 1
+          },
+          {
+            "value": "ASM-009879",
+            "count": 1
+          },
+          {
+            "value": "ASM-009880",
+            "count": 1
+          },
+          {
+            "value": "ASM-009881",
+            "count": 1
+          },
+          {
+            "value": "ASM-009882",
+            "count": 1
+          },
+          {
+            "value": "ASM-009883",
+            "count": 1
+          },
+          {
+            "value": "ASM-009884",
+            "count": 1
+          }
+        ],
+        "missing_count": 0,
+        "truncated": true
+      },
+      "request_id": {
+        "unique_nonmissing": 14809,
+        "top_values": [
+          {
+            "value": "REQ-000001",
+            "count": 1
+          },
+          {
+            "value": "REQ-010056",
+            "count": 1
+          },
+          {
+            "value": "REQ-010058",
+            "count": 1
+          },
+          {
+            "value": "REQ-010059",
+            "count": 1
+          },
+          {
+            "value": "REQ-010060",
+            "count": 1
+          },
+          {
+            "value": "REQ-010061",
+            "count": 1
+          },
+          {
+            "value": "REQ-010062",
+            "count": 1
+          },
+          {
+            "value": "REQ-010063",
+            "count": 1
+          },
+          {
+            "value": "REQ-010064",
+            "count": 1
+          },
+          {
+            "value": "REQ-010065",
+            "count": 1
+          },
+          {
+            "value": "REQ-010066",
+            "count": 1
+          },
+          {
+            "value": "REQ-010067",
+            "count": 1
+          },
+          {
+            "value": "REQ-010068",
+            "count": 1
+          },
+          {
+            "value": "REQ-010069",
+            "count": 1
+          },
+          {
+            "value": "REQ-010070",
+            "count": 1
+          },
+          {
+            "value": "REQ-010071",
+            "count": 1
+          },
+          {
+            "value": "REQ-010072",
+            "count": 1
+          },
+          {
+            "value": "REQ-010073",
+            "count": 1
+          },
+          {
+            "value": "REQ-010074",
+            "count": 1
+          },
+          {
+            "value": "REQ-010075",
+            "count": 1
+          }
+        ],
+        "missing_count": 0,
+        "truncated": true
+      },
+      "assessor_id": {
+        "unique_nonmissing": 14,
+        "top_values": [
+          {
+            "value": "ASR-111",
+            "count": 1477
+          },
+          {
+            "value": "ASR-112",
+            "count": 1388
+          },
+          {
+            "value": "ASR-113",
+            "count": 1381
+          },
+          {
+            "value": "ASR-114",
+            "count": 1366
+          },
+          {
+            "value": "ASR-110",
+            "count": 1351
+          },
+          {
+            "value": "ASR-104",
+            "count": 1114
+          },
+          {
+            "value": "ASR-105",
+            "count": 1107
+          },
+          {
+            "value": "ASR-108",
+            "count": 1089
+          },
+          {
+            "value": "ASR-107",
+            "count": 1086
+          },
+          {
+            "value": "ASR-109",
+            "count": 1051
+          },
+          {
+            "value": "ASR-106",
+            "count": 1043
+          },
+          {
+            "value": "ASR-102",
+            "count": 477
+          },
+          {
+            "value": "ASR-103",
+            "count": 445
+          },
+          {
+            "value": "ASR-101",
+            "count": 434
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "clinical_urgency": {
+        "unique_nonmissing": 4,
+        "top_values": [
+          {
+            "value": "Low",
+            "count": 5210
+          },
+          {
+            "value": "Moderate",
+            "count": 4813
+          },
+          {
+            "value": "High",
+            "count": 3427
+          },
+          {
+            "value": "Critical",
+            "count": 1359
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "assessment_notes": {
+        "unique_nonmissing": 12843,
+        "top_values": [
+          {
+            "value": "Reviewed. Advice given.",
+            "count": 305
+          },
+          {
+            "value": "See intake.",
+            "count": 289
+          },
+          {
+            "value": "Seen.",
+            "count": 286
+          },
+          {
+            "value": "28F c/o chronic condition review. Reported SpO2 97%, HR 80. Routine request. Medication/advice given, no urgent features.",
+            "count": 2
+          },
+          {
+            "value": "47F c/o abdominal symptoms. Reported SpO2 99%, HR 78, T 37.0. Advised rest and fluids; routine follow-up if symptoms persist.",
+            "count": 2
+          },
+          {
+            "value": "44M c/o breathing problems. Reported SpO2 94%, HR 76, T 36.8. Red flags elicited: breathing difficulty. Priority physician consult. Same-day in-person evaluation advised.",
+            "count": 2
+          },
+          {
+            "value": "57F c/o chest pain. Reported SpO2 92%, HR 115, T 37.0. Red flags elicited: breathing difficulty, chest pain. Critical features. Immediate clinical assessment required, emergency pathway activated.",
+            "count": 2
+          },
+          {
+            "value": "65F c/o breathing problems. Reported SpO2 95%, HR 81, T 37.2. Reassured. Self-care advice and OTC analgesia. Review if no improvement in 3-5 days.",
+            "count": 2
+          },
+          {
+            "value": "22M c/o cough/cold symptoms. Reported SpO2 98%, HR 70, T 36.9. Reassured. Self-care advice and OTC analgesia. Review if no improvement in 3-5 days.",
+            "count": 2
+          },
+          {
+            "value": "61F c/o musculoskeletal pain. Reported SpO2 98%, HR 70, T 36.9. Reassured. Self-care advice and OTC analgesia. Review if no improvement in 3-5 days.",
+            "count": 2
+          },
+          {
+            "value": "59M c/o abdominal symptoms. Reported SpO2 100%, HR 75. Routine request. Medication/advice given, no urgent features.",
+            "count": 2
+          },
+          {
+            "value": "38F c/o cough/cold symptoms. Reported SpO2 99%, HR 75, T 37.8. Reassured. Self-care advice and OTC analgesia. Review if no improvement in 3-5 days.",
+            "count": 2
+          },
+          {
+            "value": "29F c/o cough/cold symptoms. Reported SpO2 97%, HR 81, T 37.0. Advised rest and fluids; routine follow-up if symptoms persist.",
+            "count": 2
+          },
+          {
+            "value": "24F c/o cough/cold symptoms. Reported SpO2 98%, HR 65, T 37.3. Advised rest and fluids; routine follow-up if symptoms persist.",
+            "count": 2
+          },
+          {
+            "value": "27F c/o headache/neuro symptoms. Reported SpO2 99%, HR 75, T 37.2. Routine request. Medication/advice given, no urgent features.",
+            "count": 2
+          },
+          {
+            "value": "64F c/o headache/neuro symptoms. Reported SpO2 97%, HR 98, T 37.4. Red flags elicited: confusion. Priority physician consult. Same-day in-person evaluation advised.",
+            "count": 2
+          },
+          {
+            "value": "63M c/o fever. Reported SpO2 97%, HR 90, T 38.1. Needs clinician review today or tomorrow; safety-net advice given.",
+            "count": 2
+          },
+          {
+            "value": "26F c/o chest pain. Reported SpO2 99%, HR 82. Red flags elicited: chest pain. Needs clinician review today or tomorrow; safety-net advice given.",
+            "count": 2
+          },
+          {
+            "value": "25F c/o fever. Reported SpO2 94%, HR 115, T 38.8. Concerning features, escalated to physician for prompt review.",
+            "count": 2
+          },
+          {
+            "value": "74F c/o chronic condition review. Reported SpO2 97%, HR 90, T 36.3. Advised rest and fluids; routine follow-up if symptoms persist.",
+            "count": 2
+          }
+        ],
+        "missing_count": 1065,
+        "truncated": true
+      },
+      "escalation_required": {
+        "unique_nonmissing": 2,
+        "top_values": [
+          {
+            "value": "No",
+            "count": 11040
+          },
+          {
+            "value": "Yes",
+            "count": 3769
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      },
+      "assessment_timestamp": {
+        "unique_nonmissing": 14803,
+        "top_values": [
+          {
+            "value": "2026-06-05 11:05:31",
+            "count": 2
+          },
+          {
+            "value": "2026-06-24 20:16:19",
+            "count": 2
+          },
+          {
+            "value": "2026-04-07 9:54:09",
+            "count": 2
+          },
+          {
+            "value": "2026-04-14 9:21:15",
+            "count": 2
+          },
+          {
+            "value": "2025-11-27 11:18:34",
+            "count": 2
+          },
+          {
+            "value": "2026-04-07 10:51:53",
+            "count": 2
+          },
+          {
+            "value": "2026-03-31 9:37:30",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 11:14:39",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 11:19:26",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 10:47:37",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 10:04:47",
+            "count": 1
+          },
+          {
+            "value": "2025-07-01 1:40:11",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:43:28",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 11:51:27",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:16:22",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:57:54",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:08:18",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:04:03",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 9:42:47",
+            "count": 1
+          },
+          {
+            "value": "2026-03-31 11:34:48",
+            "count": 1
+          }
+        ],
+        "missing_count": 0,
+        "truncated": true
+      },
+      "triage_protocol": {
+        "unique_nonmissing": 5,
+        "top_values": [
+          {
+            "value": "Nexora Telemedicine Triage Protocol v1.0",
+            "count": 4945
+          },
+          {
+            "value": "Manchester Triage System (adapted)",
+            "count": 3403
+          },
+          {
+            "value": "Clinical judgement (no formal protocol)",
+            "count": 2722
+          },
+          {
+            "value": "Emergency Severity Index (adapted)",
+            "count": 2297
+          },
+          {
+            "value": "Schmitt-Thompson Telephone Protocols",
+            "count": 1442
+          }
+        ],
+        "missing_count": 0,
+        "truncated": false
+      }
+    }
+  },
+  "cleaning": {
+    "string_normalisation": {
+      "request_id": {
+        "normalised_rows": 0
+      },
+      "patient_id": {
+        "normalised_rows": 0
+      },
+      "date_of_birth": {
+        "normalised_rows": 0
+      },
+      "sex": {
+        "normalised_rows": 0
+      },
+      "pregnancy_flag": {
+        "normalised_rows": 0
+      },
+      "chief_complaint_category": {
+        "normalised_rows": 0
+      },
+      "reported_symptoms": {
+        "normalised_rows": 0
+      },
+      "symptom_severity": {
+        "normalised_rows": 0
+      },
+      "symptom_onset": {
+        "normalised_rows": 0
+      },
+      "pain_level": {
+        "normalised_rows": 0
+      },
+      "medical_history": {
+        "normalised_rows": 0
+      },
+      "current_medications": {
+        "normalised_rows": 0
+      },
+      "red_flags": {
+        "normalised_rows": 971
+      },
+      "comorbidities": {
+        "normalised_rows": 1190
+      },
+      "symptom_description": {
+        "normalised_rows": 0
+      },
+      "request_timestamp": {
+        "normalised_rows": 0
+      }
+    },
+    "dates": {
+      "request_timestamp": {
+        "format": "%Y-%m-%d %H:%M:%S",
+        "invalid_nonmissing": 0
+      },
+      "date_of_birth": {
+        "format": "%Y-%m-%d",
+        "invalid_nonmissing": 0
+      },
+      "negative_age_set_missing": 0,
+      "age_over_120_flagged_only": 0
+    },
+    "vitals": {
+      "systolic_bp": {
+        "inclusive_lower": 30,
+        "inclusive_upper": 300,
+        "unit": "mmHg",
+        "original_missing": 1002,
+        "non_numeric_set_missing": 0,
+        "out_of_bounds_set_missing": 0,
+        "total_new_missing": 0,
+        "final_missing": 1002
+      },
+      "diastolic_bp": {
+        "inclusive_lower": 10,
+        "inclusive_upper": 200,
+        "unit": "mmHg",
+        "original_missing": 1002,
+        "non_numeric_set_missing": 0,
+        "out_of_bounds_set_missing": 0,
+        "total_new_missing": 0,
+        "final_missing": 1002
+      },
+      "body_temperature": {
+        "inclusive_lower": 20,
+        "inclusive_upper": 45,
+        "unit": "degrees C (assumed)",
+        "original_missing": 638,
+        "non_numeric_set_missing": 0,
+        "out_of_bounds_set_missing": 0,
+        "total_new_missing": 0,
+        "final_missing": 638
+      },
+      "heart_rate": {
+        "inclusive_lower": 20,
+        "inclusive_upper": 300,
+        "unit": "beats/min",
+        "original_missing": 389,
+        "non_numeric_set_missing": 0,
+        "out_of_bounds_set_missing": 0,
+        "total_new_missing": 0,
+        "final_missing": 389
+      },
+      "respiratory_rate": {
+        "inclusive_lower": 2,
+        "inclusive_upper": 100,
+        "unit": "breaths/min",
+        "original_missing": 943,
+        "non_numeric_set_missing": 0,
+        "out_of_bounds_set_missing": 0,
+        "total_new_missing": 0,
+        "final_missing": 943
+      },
+      "oxygen_saturation": {
+        "inclusive_lower": 1,
+        "inclusive_upper": 100,
+        "unit": "percent",
+        "original_missing": 958,
+        "non_numeric_set_missing": 0,
+        "out_of_bounds_set_missing": 0,
+        "total_new_missing": 0,
+        "final_missing": 958
+      }
+    },
+    "symptom_duration": {
+      "inferred_unit": "seconds",
+      "unit_status": "Inferred from magnitude and minute-aligned values; no source unit metadata",
+      "raw_min": 600.0,
+      "raw_median": 219300.0,
+      "raw_max": 10368000.0,
+      "fraction_divisible_by_60": 1.0,
+      "converted_hours_min": 0.16666666666666666,
+      "converted_hours_median": 60.916666666666664,
+      "converted_days_max": 120.0,
+      "invalid_set_missing": 0,
+      "non_numeric_set_missing": 0,
+      "decision": "Treat as seconds: the observed minimum becomes minutes and maximum months. Interpreting these magnitudes as hours/days is implausible. Retain hours/days for inspection and log1p(hours) as the duration feature. Confirm with source owner before operational use."
+    },
+    "bp_pair_inconsistency": {
+      "rule": "diastolic_bp >= systolic_bp: set both to missing",
+      "rows": 0
+    },
+    "vital_threshold_policy": "Conservative fixed technical screening bounds, not normal ranges or clinical cutoffs; not learned from this dataset. Preserve extreme in-range values; require domain review. Missing values remain missing for train-only pipeline imputation.",
+    "assessment_timestamp": {
+      "format": "%Y-%m-%d %H:%M:%S",
+      "invalid_nonmissing": 0,
+      "missing": 0
+    },
+    "assessment_string_normalisation": {
+      "assessment_id": {
+        "normalised_rows": 0
+      },
+      "request_id": {
+        "normalised_rows": 0
+      },
+      "assessor_id": {
+        "normalised_rows": 0
+      },
+      "clinical_urgency": {
+        "normalised_rows": 0
+      },
+      "assessment_notes": {
+        "normalised_rows": 0
+      },
+      "escalation_required": {
+        "normalised_rows": 0
+      },
+      "assessment_timestamp": {
+        "normalised_rows": 0
+      },
+      "triage_protocol": {
+        "normalised_rows": 0
+      }
+    }
+  },
+  "integration": {
+    "join": "inner, one-to-one, only request_id and target from assessments",
+    "labelled_shape": [
+      14809,
+      50
+    ],
+    "class_counts": {
+      "Low": 5210,
+      "Moderate": 4813,
+      "High": 3427,
+      "Critical": 1359
+    },
+    "unlabelled_intake_rows": 276,
+    "unlabelled_report": "data/processed/unlabelled_intake_requests.csv",
+    "assessment_orphans": 0,
+    "labelled_duplicate_request_ids": 0,
+    "feature_count": 44,
+    "categorical_features": [
+      "sex",
+      "pregnancy_flag",
+      "chief_complaint_category",
+      "symptom_onset"
+    ]
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "ruff": {
+    "command": ".venv/bin/ruff check .",
+    "exit_code": 0,
+    "output": "All checks passed!\n"
+  },
+  "pytest": {
+    "command": ".venv/bin/pytest -q",
+    "exit_code": 0,
+    "output": "................                                                         [100%]\n16 passed in 1.40s\n"
+  },
+  "diff_check": {
+    "command": "git diff --check",
+    "exit_code": 0,
+    "output": ""
+  }
+}

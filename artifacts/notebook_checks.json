@@ -1,0 +1,12 @@
+{
+  "notebook": "notebooks/01_data_preparation.ipynb",
+  "executed_code_cells": 2,
+  "status": "passed",
+  "repeat_run_identical": true,
+  "output_sha256": {
+    "data/processed/triage_dataset.csv": "6747aa982cdb216f09a5d6c726da3cbb2ed05d4182b671ac26431535885d4f28",
+    "data/processed/unlabelled_intake_requests.csv": "cacd0f97012b62e2ac52788142876804ad67ff6b8a2b31970aa090967e1371e9",
+    "artifacts/data_profile.json": "1c7043654e98f23b14f8f541ab7ec6c359aade12a7d8a88c3a6854e24e38f3e0",
+    "artifacts/feature_schema.json": "7180442debe2a2808f071de3404758c98cbac5f7aa802f15ccf5031b757f4b63"
+  }
+}
