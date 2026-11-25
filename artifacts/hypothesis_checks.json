@@ -1,0 +1,40 @@
+{
+  "repeat_run_byte_identical": true,
+  "artifact_sha256": {
+    "hypothesis_test_results.csv": "93eac74feb12c4210edcc78ab9dae69bc4f59b0ff299ace1cf3a1e6a7bf32768",
+    "posthoc_results.csv": "3e5d9fe3623d59aa7b3b1ad1398ae9b0e989a88544006301d948b1867f2194f1",
+    "hypothesis_sensitivity_comparison.csv": "ccadb93196665fb8789d7685c1cc707132d8fb06d11a18e7acba71639110a9e9",
+    "hypothesis_patient_sample.csv": "ade0533af2d5755a9de5fb6aaad943ed4dd94564712fd2a2c1b956a9829c615c",
+    "hypothesis_methods.json": "8cd0103c09c1dc88745fb8ef06cd475719031ba4ee2828a688fb7b5433acc809",
+    "hypothesis_interpretation.md": "9fe1e42b40a0745ec75ac50630e0d6bd05d8a1812d28e902ba7f39c0fec3651f"
+  },
+  "ruff": {
+    "command": ".venv/bin/ruff check .",
+    "exit_code": 0,
+    "output": "All checks passed!\n"
+  },
+  "pytest": {
+    "command": ".venv/bin/pytest -q",
+    "exit_code": 0,
+    "output": "...............................                                          [100%]\n31 passed in 6.08s\n"
+  },
+  "diff_check": {
+    "command": "git diff --check",
+    "exit_code": 0,
+    "output": ""
+  },
+  "notebook": {
+    "status": "passed",
+    "notebook": "notebooks/03_hypothesis_testing.ipynb",
+    "executed_code_cells": 11,
+    "error_outputs": 0,
+    "source_dataset_unchanged": true
+  },
+  "result_counts": {
+    "omnibus": 52,
+    "posthoc": 1040,
+    "changed_adjusted_conclusions": 0,
+    "omnibus_underflows": 10,
+    "posthoc_underflows": 22
+  }
+}

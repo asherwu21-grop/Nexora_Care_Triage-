@@ -5,8 +5,8 @@ Experimental decision support for estimating telemedicine request urgency.
 **Experimental output. Not a clinical decision.**
 
 Data ingestion, profiling, cleaning, integration, deterministic feature engineering,
-and exploratory analysis are implemented. Statistical hypothesis tests, model training, evaluation,
-explainability, and dashboard views are not implemented.
+exploratory analysis, and statistical hypothesis tests are implemented. Model training,
+evaluation, explainability, and dashboard views are not implemented.
 
 ## Setup
 
@@ -94,3 +94,28 @@ fractions, distribution summaries, correlations, and pairwise observation counts
 end of the notebook. All observations are descriptive; repeated patients, missing
 data, inferred source units, and complete separation of grouped outcomes are
 reported explicitly. No split or statistical hypothesis tests are performed.
+
+## Hypothesis testing
+
+Run `python -m src.hypothesis_testing` or execute
+`notebooks/03_hypothesis_testing.ipynb` from a kernel working in the repository root.
+The workflow tests the nine requested exposure families against urgency. Any known
+red flag and any known comorbidity are primary comparisons; individual flags and
+conditions are secondary. Unknown responses remain excluded from presence/absence
+comparisons. Vitals use separate exposure/target exclusions with n reported per test.
+
+Diagnostics select ANOVA only when normality, equal-variance, and patient-repetition
+checks pass; otherwise numeric comparisons use Kruskal–Wallis. Categorical tables
+use Pearson chi-square with conditional Monte Carlo calibration for sparse expected
+counts. Corrected omnibus detections trigger Dunn, Tukey, or categorical proportion
+post-hocs; sparse proportion contrasts use Fisher exact. Holm adjustment is explicit
+for omnibus and within-parent post-hoc families. Tukey's already adjusted p-values
+receive additional conservative Holm correction.
+
+Outputs under `artifacts/` include `hypothesis_test_results.csv`, `posthoc_results.csv`,
+`hypothesis_sensitivity_comparison.csv`, `hypothesis_patient_sample.csv`,
+`hypothesis_methods.json`, and `hypothesis_interpretation.md`. Full-request p-values
+are nominal because patients repeat. A reproducible random request per patient is
+selected before any missing-value exclusions for the sensitivity analysis. Effect
+sizes and plain-language interpretations separate statistical detection from
+practical importance; these analyses do not establish causation.

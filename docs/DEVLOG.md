@@ -124,3 +124,73 @@
   local socket/bundled renderer failure. Open issues: descriptive full-cohort EDA
   means a later holdout from this cohort is not fully blinded; no significance,
   causal, clinical-validity, or unseen-patient performance conclusions are made.
+
+
+## 2026-11-25 — Hypothesis tests and repeated-patient sensitivity
+
+- Read `AGENTS.md`. Implemented `src/hypothesis_testing.py` and executed
+  `notebooks/03_hypothesis_testing.ipynb`; added
+  `tests/test_hypothesis_testing.py` and updated README commands and methods.
+  No model fitting, split assignment, imputation, or causal claims were added.
+- Operationalised the requested nine primary exposures as age, sex, chief
+  complaint, symptom severity, any known red flag, any known comorbidity, oxygen
+  saturation, heart rate and symptom duration. Added each individual red flag and
+  condition as explicitly secondary comparisons. Counts read from methods/results:
+  9 primary and 17 secondary
+  hypotheses per cohort; 52 omnibus rows and 1040 posthoc rows.
+- Wrote `artifacts/hypothesis_test_results.csv`, `posthoc_results.csv`,
+  `hypothesis_sensitivity_comparison.csv`, `hypothesis_patient_sample.csv`,
+  `hypothesis_methods.json`, `hypothesis_interpretation.md`,
+  `hypothesis_notebook_checks.json`, and `hypothesis_checks.json`.
+  Every result includes H0/H1, assumptions/diagnostics, sample size and exclusions,
+  statistic, nominal and adjusted p-values, effect size, decision and an
+  interpretation separating detection from practical/clinical importance.
+- Numeric selection uses per-class Shapiro diagnostics (seeded capped samples),
+  median-centred Levene, and a patient-repetition check. ANOVA requires all checks;
+  otherwise Kruskal-Wallis is used. All observed numeric comparisons selected KW;
+  synthetic tests verify the ANOVA/Tukey path. Rank epsilon-squared is explicitly
+  H/(N-1), distinct from adjusted rank eta-squared. Other omnibus effects are
+  Cramer's V and ANOVA eta-squared. Group medians and posthoc raw-unit differences
+  help interpret magnitude without inventing a practical threshold.
+- Categorical tables require every expected count to meet the specified minimum;
+  failures use fixed-margin conditional Monte Carlo calibration of Pearson's
+  statistic. Observed sparse-table result(s): [{'analysis': 'one_request_per_patient', 'exposure': 'Chief complaint', 'minimum_expected_count': 4.935457516339869, 'p_value_holm': 0.00035}]. Proportion posthocs use
+  Fisher exact when expected/observed counts are sparse. Methods observed in the
+  posthoc artifact: {'Two-sided two-proportion z-test': 973, 'Dunn (pooled ranks, tie-corrected)': 48, 'Fisher exact (sparse proportion comparison)': 19}.
+- Applied Holm across all primary+secondary omnibus tests within each cohort,
+  then gated posthocs on adjusted detection. Posthoc Holm covers all contrasts
+  within each parent/cohort. Dunn uses pooled ranks with tie correction. Tukey
+  already adjusts its p-values; extra Holm is conservatively documented and tested.
+- Missing exposure/target pairs are excluded separately per test. Unknown
+  multivalue responses are excluded rather than made absent. One seeded request
+  per patient is selected before these exclusions; selected missing vitals are not
+  replaced by another request. Full cohort size: 14,809;
+  patient sensitivity size: 9,792.
+- The no-repeated-ID check is reported without asserting all independence assumptions.
+  Full-request tests remain nominal because repeated patients violate independence;
+  KW and Monte Carlo do not fix clustering. Sensitivity tests address within-patient
+  repetition but change weighting/power and use only one random selection.
+- Patient-cohort primary adjusted detections:
+  8/9.
+  All-cohort versus patient adjusted decision changes:
+  0.
+  Patient-cohort comparisons not detected after Holm: ['Recorded sex', 'Chronic kidney disease', 'HIV', 'Other chronic condition'].
+  Age illustrates statistical/practical separation: Holm p=2.26522e-09,
+  rank epsilon-squared=0.00490945; practical thresholds remain unspecified.
+- Numerical underflow is flagged, not interpreted as literal zero probability:
+  10 omnibus and
+  22 posthoc p-values. The known complete
+  grouped-outcome separation for the self-harm flag remains a provenance question.
+  No causal or clinical-validity conclusion is made.
+- Verification: Ruff and all pytest tests passed; exact outputs are in
+  `artifacts/hypothesis_checks.json`. The notebook executed
+  11 code cells with
+  0 errors and preserved the prepared dataset.
+  Repeated generation produced byte-identical result/method/sample/interpretation
+  artifacts: True. Local Jupyter execution required
+  approved socket access outside the sandbox. Statsmodels was installed at its
+  already pinned version; no dependency pins changed.
+- Open issues: this remains exploratory after full-cohort EDA; one patient draw
+  is not cluster-robust inference; practical significance needs domain thresholds;
+  source duration units and label-generation provenance remain unconfirmed.
+  Method references are saved in `hypothesis_methods.json` and the notebook.
