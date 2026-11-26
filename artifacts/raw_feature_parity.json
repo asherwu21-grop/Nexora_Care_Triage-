@@ -1,0 +1,7 @@
+{
+  "scope": "Development only",
+  "n_checked": 32,
+  "max_numeric_feature_difference": 3.552713678800501e-15,
+  "max_probability_difference": 2.220446049250313e-16,
+  "categorical_disagreements": 0
+}

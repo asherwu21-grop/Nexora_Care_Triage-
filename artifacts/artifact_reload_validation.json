@@ -1,0 +1,15 @@
+{
+  "status": "passed",
+  "model_version": "triage-lightgbm-v1-01dd07c4b659",
+  "input_kind": "synthetic raw intake with explicitly empty known prior history",
+  "probability_shape": [
+    1,
+    4
+  ],
+  "probability_sums": [
+    1.0
+  ],
+  "preprocessing_matches_full_pipeline": true,
+  "test_data_used": false,
+  "safety_notice": "Experimental output. Not a clinical decision."
+}

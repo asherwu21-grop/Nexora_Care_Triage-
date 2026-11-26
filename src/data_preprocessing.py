@@ -154,7 +154,10 @@ def validate_keys(frame: pd.DataFrame, name: str) -> None:
         raise ValueError(f"{name}: request_id must be present and unique")
 
 
-def clean_intake(intake: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
+def clean_intake(
+    intake: pd.DataFrame,
+    allow_missing_duration: bool = False,
+) -> tuple[pd.DataFrame, dict]:
     """Clean without imputing or estimating population-dependent parameters."""
     result, strings = clean_strings(intake)
     validate_keys(result, "intake")
@@ -179,18 +182,25 @@ def clean_intake(intake: pd.DataFrame) -> tuple[pd.DataFrame, dict]:
     duration = pd.to_numeric(result["symptom_duration"], errors="coerce")
     invalid_duration = duration.notna() & (~np.isfinite(duration) | (duration < 0))
     valid = duration.mask(invalid_duration)
-    if valid.dropna().empty:
+    observed_duration = not valid.dropna().empty
+    if not observed_duration and not allow_missing_duration:
         raise ValueError("No valid durations available for unit inspection")
     audit["symptom_duration"] = {
         "inferred_unit": "seconds",
-        "unit_status": "Inferred from magnitude and minute-aligned values; no source unit metadata",
-        "raw_min": float(valid.min()),
-        "raw_median": float(valid.median()),
-        "raw_max": float(valid.max()),
-        "fraction_divisible_by_60": float((valid.dropna() % 60 == 0).mean()),
-        "converted_hours_min": float(valid.min() / 3600),
-        "converted_hours_median": float(valid.median() / 3600),
-        "converted_days_max": float(valid.max() / 86400),
+        "unit_status": (
+            "Inferred from magnitude and minute-aligned values; no source unit metadata"
+            if observed_duration
+            else "No observed duration in inference batch; configured seconds convention"
+        ),
+        "raw_min": float(valid.min()) if observed_duration else None,
+        "raw_median": float(valid.median()) if observed_duration else None,
+        "raw_max": float(valid.max()) if observed_duration else None,
+        "fraction_divisible_by_60": (
+            float((valid.dropna() % 60 == 0).mean()) if observed_duration else None
+        ),
+        "converted_hours_min": float(valid.min() / 3600) if observed_duration else None,
+        "converted_hours_median": float(valid.median() / 3600) if observed_duration else None,
+        "converted_days_max": float(valid.max() / 86400) if observed_duration else None,
         "invalid_set_missing": int(invalid_duration.sum()),
         "non_numeric_set_missing": int(
             (duration.isna() & result["symptom_duration"].notna()).sum()

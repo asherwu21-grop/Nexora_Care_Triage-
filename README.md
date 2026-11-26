@@ -6,8 +6,8 @@ Experimental decision support for estimating telemedicine request urgency.
 
 Data ingestion, profiling, cleaning, integration, deterministic feature engineering,
 exploratory analysis, statistical hypothesis tests, baseline training, model experiments,
-and calibration with validation evaluation are implemented. Final test evaluation, explainability,
-and dashboard views are not implemented.
+calibration, final test evaluation, raw-input inference, and SHAP explanations are implemented.
+Dashboard views are not implemented.
 
 ## Setup
 
@@ -39,7 +39,7 @@ artifacts/         Generated reports, metrics, and figures
 dashboard/app.py   Streamlit entry point
 dashboard/pages/   Dashboard views
 dashboard/utils/   Dashboard package scaffolding; workflow logic lives in src/
-tests/             Future automated tests
+tests/             Automated workflow and artifact validation tests
 docs/DEVLOG.md     Development record
 ```
 
@@ -149,11 +149,10 @@ class support. `artifacts/baseline_validation_predictions.csv` contains validati
 predictions, and `artifacts/baseline_training.json` records fit provenance. The
 fitted pipeline is saved to `models/baseline_logistic_regression.joblib`.
 
-Test metadata and the requested descriptive class counts are recorded, but test
-features never enter model fitting or prediction, and test performance is not
-computed. Earlier full-cohort EDA/hypothesis testing means the newly reserved
-holdout is not fully blinded to previous exploration. Retain it for final model
-evaluation. Review High/Critical recall and under-triage before aggregate accuracy;
+The development workflow records test metadata and descriptive class counts but never
+predicts the test set. The separate finalization workflow below has now evaluated the
+frozen model once. Earlier full-cohort EDA/hypothesis testing means the newly reserved
+holdout is not fully blinded to previous exploration. This limits the interpretation of the final evaluation. Review High/Critical recall and under-triage before aggregate accuracy;
 experimental model output is not a clinical decision.
 
 ## Model experimentation
@@ -187,8 +186,66 @@ directory also holds CV request IDs, version/code fingerprints, calibration
 HTML/JSON/bin tables and PNGs, validation probabilities, a model registry, and a
 leakage audit. Selected default, tuned, and calibrated models are saved in `models/`.
 
-No test prediction or evaluation occurs. Repeated validation reuse makes this a
+No test prediction or evaluation occurs in the experimentation command. Repeated validation reuse makes this a
 development shortlist, with selection bias and the earlier full-cohort exploration
 limitation stated explicitly. Near-perfect aggregate scores trigger structural and
 permuted-target checks before publication; uncertain label provenance remains a
 separate limitation even when mechanical checks pass.
+
+
+## Final model, evaluation and explanations
+
+`artifacts/final_model_plan.json` freezes the highest-ranked latest-session validation
+candidate from `model_comparison.csv`: default LightGBM with balanced class weights,
+structured inputs, uncalibrated probabilities and argmax decisions. Its recorded
+rank balances High/Critical recall, triage errors, macro F1, Brier score and stability.
+The cost-sensitive logistic alternative reduces under-triage at the expense of more
+over-triage and lower macro F1. No selection or threshold changes follow test results.
+
+```sh
+python -m src.finalize_model prepare
+python -m src.validate_artifacts
+python -m src.explainability
+python -m src.finalize_model evaluate-test
+```
+
+Preparation refits the frozen configuration and all learned preprocessing on train
+plus validation, excluding test and purged requests. Models are saved to
+`models/triage_model.joblib` (full raw-input pipeline) and
+`models/preprocessing_pipeline.joblib`. These binary files are Git ignored and must
+be distributed separately or regenerated before a fresh final evaluation. The
+manifest records model/data/split/code hashes, fit IDs and pinned package versions.
+Once a final evaluation ledger exists, preparation verifies saved files without refitting.
+
+`src.validate_artifacts` reloads both artifacts in a fresh process and predicts a
+synthetic raw intake row, checking probability shape, normalization and preprocessing
+parity. `artifacts/feature_schema.json` documents required raw columns, missing values,
+urgency mapping and the history-context contract. Later requests must include a
+validated prior-request count from `attach_history_context(raw_rows, complete_history)`.
+History needs only request ID, patient ID and timestamp; counts include strictly prior
+requests, never future or simultaneous events. Missing history is not silently zero.
+
+The final evaluator in `src/evaluate.py` writes `model_metrics.json`,
+`classification_report.csv`, `confusion_matrix.png`, `under_over_triage.csv` and
+`model_predictions.csv` under `artifacts/`. `final_test_evaluation.json` records the
+single prediction/evaluation pass and output hashes. Repeated evaluation commands
+validate hashes and return saved results without loading or predicting with the model.
+If export fails after prediction caching, `python -m src.finalize_model recover-exports`
+finishes from the saved probability cache without another inference pass.
+
+The prediction table includes deterministic prediction IDs, request IDs, four class
+probabilities, model version, UTC prediction timestamp and the non-clinical score
+`100 * (P(Moderate) + 2*P(High) + 3*P(Critical)) / 3`.
+This is an experimental ordinal ranking index, not clinical risk.
+`model_predictions_metadata.json` documents the formula and class order.
+
+`src.explainability` explains a reproducible development-only sample. Native gain
+importance is saved at `artifacts/feature_importance*`; SHAP global summaries,
+per-class plots, individual waterfalls, numeric contributions and provenance notes
+are under `artifacts/explainability/`. SHAP explains raw class margins, not probability
+changes. Multi-hot families are summed per request before averaging absolute SHAP;
+systolic/diastolic pressures and availability indicators remain separate. Severity,
+pain and red flags may reflect label construction; the earlier red-flag separation
+and unknown label provenance require independent review. Earlier whole-cohort EDA
+also means the test cohort was not fully blinded. See `final_model_checks.json` for
+verification and `model_metrics.json` for the actual final results.

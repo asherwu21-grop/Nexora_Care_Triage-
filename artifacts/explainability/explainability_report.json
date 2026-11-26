@@ -1,0 +1,175 @@
+{
+  "model_version": "triage-lightgbm-v1-01dd07c4b659",
+  "scope": "train_plus_validation only",
+  "sample_n": 256,
+  "sample_method": "Uniform request sample, seed 42; descriptive, not population inference",
+  "explainer": "TreeExplainer(tree_path_dependent, model_output=raw)",
+  "class_order": [
+    "Low",
+    "Moderate",
+    "High",
+    "Critical"
+  ],
+  "max_additivity_residual": 2.042810365310288e-14,
+  "grouped_features": [
+    "Age at request",
+    "Log symptom duration",
+    "Systolic BP",
+    "Diastolic BP",
+    "Temperature",
+    "Heart rate",
+    "Respiratory rate",
+    "Oxygen saturation",
+    "Red flags",
+    "Comorbidities",
+    "Prior request count",
+    "Symptom severity",
+    "Pain level",
+    "Recorded sex",
+    "Pregnancy response",
+    "Chief complaint",
+    "Symptom onset",
+    "Systolic BP availability",
+    "Diastolic BP availability",
+    "Temperature availability",
+    "Heart rate availability",
+    "Respiratory rate availability",
+    "Oxygen saturation availability"
+  ],
+  "forbidden_features": [],
+  "top_gain_features": [
+    {
+      "feature": "ordinal__symptom_severity_ordinal",
+      "gain_fraction": 0.41639723923158173
+    },
+    {
+      "feature": "numeric__heart_rate",
+      "gain_fraction": 0.11554799428122316
+    },
+    {
+      "feature": "numeric__oxygen_saturation",
+      "gain_fraction": 0.08130150558456177
+    },
+    {
+      "feature": "numeric__red_flag_count",
+      "gain_fraction": 0.05382643005163159
+    },
+    {
+      "feature": "numeric__systolic_bp",
+      "gain_fraction": 0.042919909512908555
+    },
+    {
+      "feature": "ordinal__pain_level_ordinal",
+      "gain_fraction": 0.03812729934377895
+    },
+    {
+      "feature": "numeric__symptom_duration_log1p_hours",
+      "gain_fraction": 0.034044361288362836
+    },
+    {
+      "feature": "numeric__body_temperature",
+      "gain_fraction": 0.033949611496659045
+    },
+    {
+      "feature": "numeric__patient_age",
+      "gain_fraction": 0.032126209731911985
+    },
+    {
+      "feature": "numeric__diastolic_bp",
+      "gain_fraction": 0.026648345582544267
+    }
+  ],
+  "top_shap_families": [
+    {
+      "feature": "Symptom severity",
+      "mean_absolute_shap": 0.8810244162541894,
+      "mean_absolute_shap_Low": 1.050192862343181,
+      "mean_absolute_shap_Moderate": 0.43711298577455304,
+      "mean_absolute_shap_High": 0.6539482601356176,
+      "mean_absolute_shap_Critical": 1.3828435567634063
+    },
+    {
+      "feature": "Heart rate",
+      "mean_absolute_shap": 0.46568642182381975,
+      "mean_absolute_shap_Low": 0.6142923095988839,
+      "mean_absolute_shap_Moderate": 0.2655664971774032,
+      "mean_absolute_shap_High": 0.315258665122785,
+      "mean_absolute_shap_Critical": 0.6676282153962066
+    },
+    {
+      "feature": "Red flags",
+      "mean_absolute_shap": 0.3791639372966379,
+      "mean_absolute_shap_Low": 0.5333393313095692,
+      "mean_absolute_shap_Moderate": 0.4671230091611022,
+      "mean_absolute_shap_High": 0.286714463509688,
+      "mean_absolute_shap_Critical": 0.2294789452061928
+    },
+    {
+      "feature": "Oxygen saturation",
+      "mean_absolute_shap": 0.34171750372590404,
+      "mean_absolute_shap_Low": 0.3765449570178599,
+      "mean_absolute_shap_Moderate": 0.24132107842372807,
+      "mean_absolute_shap_High": 0.3996908394201154,
+      "mean_absolute_shap_Critical": 0.34931314004191233
+    },
+    {
+      "feature": "Pain level",
+      "mean_absolute_shap": 0.2814292064169783,
+      "mean_absolute_shap_Low": 0.3524840005169498,
+      "mean_absolute_shap_Moderate": 0.1393893760104841,
+      "mean_absolute_shap_High": 0.2297727484121843,
+      "mean_absolute_shap_Critical": 0.40407070072829565
+    },
+    {
+      "feature": "Respiratory rate",
+      "mean_absolute_shap": 0.12431864555690587,
+      "mean_absolute_shap_Low": 0.12129380371900518,
+      "mean_absolute_shap_Moderate": 0.06642405887714192,
+      "mean_absolute_shap_High": 0.09608651659356111,
+      "mean_absolute_shap_Critical": 0.2134702030379155
+    },
+    {
+      "feature": "Chief complaint",
+      "mean_absolute_shap": 0.0986313222248902,
+      "mean_absolute_shap_Low": 0.1682471985531404,
+      "mean_absolute_shap_Moderate": 0.039901831990684616,
+      "mean_absolute_shap_High": 0.10106817377683722,
+      "mean_absolute_shap_Critical": 0.08530808457889831
+    },
+    {
+      "feature": "Temperature",
+      "mean_absolute_shap": 0.09259260644422308,
+      "mean_absolute_shap_Low": 0.1283621856669123,
+      "mean_absolute_shap_Moderate": 0.046736320704789516,
+      "mean_absolute_shap_High": 0.06529649438921611,
+      "mean_absolute_shap_Critical": 0.1299754250159743
+    },
+    {
+      "feature": "Systolic BP",
+      "mean_absolute_shap": 0.08746437322033535,
+      "mean_absolute_shap_Low": 0.09894033342442202,
+      "mean_absolute_shap_Moderate": 0.08065719658511765,
+      "mean_absolute_shap_High": 0.07993657912980356,
+      "mean_absolute_shap_Critical": 0.09032338374199814
+    },
+    {
+      "feature": "Symptom onset",
+      "mean_absolute_shap": 0.06598533692810218,
+      "mean_absolute_shap_Low": 0.060071784062895546,
+      "mean_absolute_shap_Moderate": 0.02185091077581371,
+      "mean_absolute_shap_High": 0.059378918329792696,
+      "mean_absolute_shap_Critical": 0.1226397345439068
+    }
+  ],
+  "individual_examples": 4,
+  "notes": [
+    "Identifiers, dates, target and assessment fields are absent from transformed model features.",
+    "Severity, pain and red flags can reflect how clinician urgency labels were constructed; verify source-label provenance even when legitimate intake fields dominate.",
+    "The earlier EDA found complete High/Critical separation for a red-flag item. This model-derived importance does not establish independent clinical validity.",
+    "Red-flag and comorbidity items/counts/none/unknown are grouped by summing signed per-request SHAP contributions before taking absolute means; cancellations are preserved.",
+    "Numeric systolic and diastolic pressure remain separate; missingness indicators retain separate availability families to expose process proxies.",
+    "Tree-path-dependent SHAP uses recorded training path counts and explains raw class margins, not probability changes, clinical recommendations, or causal effects."
+  ],
+  "methods_source": "https://shap.readthedocs.io/en/stable/generated/shap.TreeExplainer.html",
+  "safety_notice": "Experimental output. Not a clinical decision."
+}

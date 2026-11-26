@@ -1,0 +1,25 @@
+{
+  "table": "model_predictions.csv",
+  "n_predictions": 1074,
+  "model_version": "triage-lightgbm-v1-01dd07c4b659",
+  "probability_columns": [
+    "probability_low",
+    "probability_moderate",
+    "probability_high",
+    "probability_critical"
+  ],
+  "probability_order": [
+    "Low",
+    "Moderate",
+    "High",
+    "Critical"
+  ],
+  "prioritization_score_formula": "100 * (P(Moderate) + 2*P(High) + 3*P(Critical)) / 3",
+  "score_is_clinical": false,
+  "score_range": [
+    0,
+    100
+  ],
+  "score_meaning": "Experimental probability-weighted ordinal ranking index, not clinical risk",
+  "safety_notice": "Experimental output. Not a clinical decision."
+}

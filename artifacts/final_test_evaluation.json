@@ -1,0 +1,21 @@
+{
+  "status": "complete",
+  "model_version": "triage-lightgbm-v1-01dd07c4b659",
+  "selected_run_id": "default_LightGBM_class_weights",
+  "n_fit": 11545,
+  "model_prediction_passes": 1,
+  "prediction_timestamp": "2026-11-26T01:44:00.816295+00:00",
+  "model_sha256": "03d92fc80206950f55909e485c2d514a57a9341d587198cee02d6b4224f12243",
+  "prediction_cache_sha256": "2ba434fc8e44945ea94cd5cc9d414ce4f3e10a518bfddd703397e27baff124f7",
+  "completed_at": "2026-11-26T01:44:01.894621+00:00",
+  "n_test_predictions": 1074,
+  "evaluation_count": 1,
+  "output_sha256": {
+    "model_metrics.json": "bb2b7b41a67163fe47af19866640246b8cfe0b2685695143c5241cb6216c90ad",
+    "classification_report.csv": "7a4fc0309f76759f41abf924d4c30ad536a41cf77fe3284aadf3592f7b813cf2",
+    "under_over_triage.csv": "19759dd5a786fb75b9b0a3a4dd3b4d17f43cd784075ad1db4f25f7a43539f813",
+    "confusion_matrix.png": "95dd74640a602a8da692878887142120d975679abe3b8ec8fc6bdb68cba5ad40",
+    "model_predictions.csv": "84a0750bc5fbf38a6f6562442c04bc4393b759ee3fdbcb32ee3bc33693d461b1",
+    "model_predictions_metadata.json": "a073a6777363979b450279f02ffce6eb91f478975e46d34f79f4f8cd5430dc2d"
+  }
+}

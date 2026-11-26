@@ -1,9 +1,11 @@
 """Ordinal triage-error accounting and reproducible classification metrics.
 
-These helpers do not load data or models. Call explicitly on the allowed split;
-training code uses validation only and never calls them on the reserved test set.
+Metric helpers operate on arrays. Baseline/experiment workflows use validation
+only. The explicit final-test entry point performs a ledger-guarded single test
+pass and caches its predictions and metrics for recovery without new inference.
 """
 
+from datetime import UTC
 from pathlib import Path
 
 import numpy as np
@@ -137,12 +139,16 @@ def evaluate_predictions(
 
 
 def aligned_probabilities(estimator, X) -> np.ndarray:
-    """Canonical ordinal-code probability columns, checked and normalised for rounding."""
+    """Canonical urgency probability columns for encoded or decoded models."""
     classes = list(estimator.classes_)
-    if set(classes) != set(range(len(URGENCY_ORDER))):
-        raise ValueError("Experiment probabilities require fixed ordinal-code classes 0..3")
+    if set(classes) == set(range(len(URGENCY_ORDER))):
+        order = list(range(4))
+    elif set(classes) == set(URGENCY_ORDER):
+        order = list(URGENCY_ORDER)
+    else:
+        raise ValueError("Model classes must be the four configured labels or ordinal codes")
     probabilities = np.asarray(estimator.predict_proba(X), dtype=float)
-    probabilities = probabilities[:, [classes.index(index) for index in range(4)]]
+    probabilities = probabilities[:, [classes.index(label) for label in order]]
     if not np.isfinite(probabilities).all() or (probabilities < 0).any():
         raise ValueError("Non-finite or negative probabilities")
     totals = probabilities.sum(axis=1, keepdims=True)
@@ -209,3 +215,265 @@ def probability_decision(probabilities: np.ndarray, rule: str = "argmax", **para
         predicted = np.where((probabilities[:, 2] >= high) & (predicted < 2), 2, predicted)
         return np.where(probabilities[:, 3] >= critical, 3, predicted)
     raise ValueError("Unknown decision rule")
+
+
+def plot_confusion_matrix(metrics: dict, destination: Path) -> None:
+    """Render the already-computed matrix; never call the model or rescore outcomes."""
+    import os
+    import tempfile
+
+    os.environ.setdefault("MPLCONFIGDIR", str(Path(tempfile.gettempdir()) / "nexora-matplotlib"))
+    import matplotlib
+
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    matrix = np.asarray(metrics["confusion_matrix"])
+    fig, ax = plt.subplots(figsize=(8, 6.8), constrained_layout=True)
+    image = ax.imshow(matrix, cmap="Blues")
+    fig.colorbar(image, ax=ax, label="Requests")
+    ax.set(
+        xticks=np.arange(4),
+        yticks=np.arange(4),
+        xticklabels=URGENCY_ORDER,
+        yticklabels=URGENCY_ORDER,
+        xlabel="Predicted urgency",
+        ylabel="True urgency",
+        title="Final test confusion matrix\nExperimental output. Not a clinical decision.",
+    )
+    for row in range(4):
+        for column in range(4):
+            ax.text(
+                column,
+                row,
+                str(matrix[row, column]),
+                ha="center",
+                va="center",
+                color="white" if matrix[row, column] > matrix.max() / 2 else "#17263b",
+            )
+    fig.savefig(destination, dpi=180)
+    plt.close(fig)
+
+
+def _final_test_exports(output_dir: Path, ledger: dict) -> dict:
+    """Finish exports from immutable cached predictions; no model inference occurs."""
+    import json
+    from datetime import datetime
+
+    import pandas as pd
+
+    from src.finalize_model import digest
+    from src.inference import PROBABILITY_COLUMNS, SAFETY_NOTICE, prediction_table
+
+    cache_path = output_dir / "final_test_predictions.npz"
+    if digest(cache_path) != ledger["prediction_cache_sha256"]:
+        raise ValueError("Final prediction cache has changed")
+    with np.load(cache_path, allow_pickle=False) as cache:
+        ids = cache["request_ids"].astype(str)
+        probabilities = cache["probabilities"]
+        actual = cache["true_urgency"].astype(str)
+    labels = np.asarray(URGENCY_ORDER)[probabilities.argmax(axis=1)]
+    metrics_path = output_dir / "model_metrics.json"
+    if metrics_path.exists():
+        metrics = json.loads(metrics_path.read_text())
+        if metrics["model_version"] != ledger["model_version"]:
+            raise ValueError("Existing final metrics refer to a different model version")
+    else:
+        metrics = evaluate_predictions(actual, labels, split_name="test")
+        encoded = np.array([URGENCY_ORDER.index(label) for label in actual])
+        metrics.update(probability_metrics(encoded, probabilities))
+        metrics.update(
+            {
+                "model_version": ledger["model_version"],
+                "selected_run_id": ledger["selected_run_id"],
+                "final_test_evaluation": True,
+                "evaluation_count": 1,
+                "n_fit": ledger["n_fit"],
+                "fit_scope": "train_plus_validation",
+                "high_recall": metrics["classification_report"]["High"]["recall"],
+                "critical_recall": metrics["classification_report"]["Critical"]["recall"],
+                "limitations": (
+                    "Configuration fixed using development validation before this final test pass. "
+                    "Earlier whole-cohort EDA/hypothesis analyses mean the holdout was not fully "
+                    "blinded to prior exploration. Probabilities and ranking"
+                    " index are non-clinical. "
+                    "No model reselection or threshold changes follow these test outcomes."
+                ),
+            }
+        )
+        write_json(metrics_path, metrics)
+    rows = {
+        name: row for name, row in metrics["classification_report"].items() if isinstance(row, dict)
+    }
+    pd.DataFrame.from_dict(rows, orient="index").rename_axis("class").to_csv(
+        output_dir / "classification_report.csv"
+    )
+    errors = metrics["triage_errors"]
+    counts = []
+    for kind in ["under_triage", "over_triage", "severe_under_triage"]:
+        counts.append(
+            {
+                "scope": "overall",
+                "true_class": "all",
+                "error_type": kind,
+                "count": errors[f"{kind}_count"],
+                "denominator": errors["n"],
+                "rate": errors[f"{kind}_rate"],
+            }
+        )
+    for label, detail in errors["per_true_class"].items():
+        for kind in ["under_triage", "over_triage", "severe_under_triage"]:
+            counts.append(
+                {
+                    "scope": "true_class",
+                    "true_class": label,
+                    "error_type": kind,
+                    "count": detail[f"{kind}_count"],
+                    "denominator": detail["support"],
+                    "rate": detail[f"{kind}_rate"],
+                }
+            )
+    for kind, count in errors["severe_under_triage_breakdown"].items():
+        label = kind.split("_to_")[0]
+        n = errors["per_true_class"][label]["support"]
+        counts.append(
+            {
+                "scope": "severe_breakdown_true_class",
+                "true_class": label,
+                "error_type": kind,
+                "count": count,
+                "denominator": n,
+                "rate": count / n if n else None,
+            }
+        )
+    pd.DataFrame(counts).to_csv(output_dir / "under_over_triage.csv", index=False)
+    plot_confusion_matrix(metrics, output_dir / "confusion_matrix.png")
+    table = prediction_table(
+        ids, probabilities, ledger["model_version"], ledger["prediction_timestamp"]
+    )
+    table.to_csv(output_dir / "model_predictions.csv", index=False)
+    write_json(
+        output_dir / "model_predictions_metadata.json",
+        {
+            "table": "model_predictions.csv",
+            "n_predictions": len(table),
+            "model_version": ledger["model_version"],
+            "probability_columns": PROBABILITY_COLUMNS,
+            "probability_order": list(URGENCY_ORDER),
+            "prioritization_score_formula": "100 * (P(Moderate) + 2*P(High) + 3*P(Critical)) / 3",
+            "score_is_clinical": False,
+            "score_range": [0, 100],
+            "score_meaning": (
+                "Experimental probability-weighted ordinal ranking index, not clinical risk"
+            ),
+            "safety_notice": SAFETY_NOTICE,
+        },
+    )
+    outputs = [
+        "model_metrics.json",
+        "classification_report.csv",
+        "under_over_triage.csv",
+        "confusion_matrix.png",
+        "model_predictions.csv",
+        "model_predictions_metadata.json",
+    ]
+    ledger.update(
+        {
+            "status": "complete",
+            "completed_at": datetime.now(UTC).isoformat(),
+            "n_test_predictions": len(ids),
+            "evaluation_count": 1,
+            "output_sha256": {name: digest(output_dir / name) for name in outputs},
+        }
+    )
+    write_json(output_dir / "final_test_evaluation.json", ledger)
+    return metrics
+
+
+def evaluate_final_model(output_dir=None, models_dir=None) -> dict:
+    """Evaluate ONCE; later calls load immutable results without loading/predicting the model.
+
+    Exclusive ledger creation prevents an unnoticed repeat. If exports fail after
+    prediction, use recover_final_test_exports to reuse the stored probabilities
+    and existing metrics, never a second model pass or a test-driven refit.
+    """
+    import json
+    from datetime import datetime
+
+    from src.config import ARTIFACTS_DIR, MODELS_DIR
+    from src.finalize_model import digest, final_test_payload, verify_frozen_artifacts
+
+    output_dir = Path(output_dir or ARTIFACTS_DIR)
+    models_dir = Path(models_dir or MODELS_DIR)
+    ledger_path = output_dir / "final_test_evaluation.json"
+    if ledger_path.exists():
+        ledger = json.loads(ledger_path.read_text())
+        if ledger["status"] != "complete":
+            raise RuntimeError(
+                "Test pass already started; recover cached exports without new inference"
+            )
+        manifest = verify_frozen_artifacts(output_dir, models_dir)
+        if manifest["model_version"] != ledger["model_version"]:
+            raise ValueError("Current model differs from the evaluated version")
+        for name, expected in ledger["output_sha256"].items():
+            if digest(output_dir / name) != expected:
+                raise ValueError(f"Final test output changed: {name}")
+        print("Returning cached final test results; no model load, prediction or reevaluation")
+        return json.loads((output_dir / "model_metrics.json").read_text())
+    manifest = verify_frozen_artifacts(output_dir, models_dir)
+    ledger = {
+        "status": "started",
+        "model_version": manifest["model_version"],
+        "selected_run_id": manifest["selected_run_id"],
+        "n_fit": manifest["n_fit"],
+        "model_prediction_passes": 1,
+        "prediction_timestamp": datetime.now(UTC).isoformat(),
+        "model_sha256": manifest["artifact_sha256"]["triage_model.joblib"],
+    }
+    with ledger_path.open("x", encoding="utf-8") as handle:
+        json.dump(ledger, handle, indent=2)
+    ids, probabilities, actual = final_test_payload(manifest, models_dir)
+    cache = output_dir / "final_test_predictions.npz"
+    np.savez_compressed(
+        cache,
+        request_ids=np.asarray(ids, dtype=str),
+        probabilities=probabilities,
+        true_urgency=np.asarray(actual, dtype=str),
+    )
+    ledger["prediction_cache_sha256"] = digest(cache)
+    ledger["status"] = "predictions_cached"
+    write_json(ledger_path, ledger)
+    metrics = _final_test_exports(output_dir, ledger)
+    print(
+        json.dumps(
+            {
+                name: metrics[name]
+                for name in [
+                    "model_version",
+                    "n_evaluated",
+                    "high_recall",
+                    "critical_recall",
+                    "macro_f1",
+                    "accuracy",
+                ]
+            },
+            indent=2,
+        )
+    )
+    print(json.dumps(metrics["triage_errors"], indent=2))
+    return metrics
+
+
+def recover_final_test_exports(output_dir=None, models_dir=None) -> dict:
+    """Recover files only from the first cached test pass; never load or call a model."""
+    import json
+
+    from src.config import ARTIFACTS_DIR
+
+    output_dir = Path(output_dir or ARTIFACTS_DIR)
+    ledger = json.loads((output_dir / "final_test_evaluation.json").read_text())
+    if ledger["status"] == "complete":
+        return evaluate_final_model(output_dir=output_dir, models_dir=models_dir)
+    if "prediction_cache_sha256" not in ledger:
+        raise RuntimeError("No complete first-pass cache; refusing automatic repeat test inference")
+    return _final_test_exports(output_dir, ledger)

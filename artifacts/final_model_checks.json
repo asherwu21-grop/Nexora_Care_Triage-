@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "model_version": "triage-lightgbm-v1-01dd07c4b659",
+  "n_test_predictions": 1074,
+  "probability_shape": [
+    1074,
+    4
+  ],
+  "probability_sum_max_error": 4.440892098500626e-16,
+  "score_formula_verified": true,
+  "request_and_prediction_ids_unique": true,
+  "test_ids_match_frozen_split": true,
+  "frozen_code_model_and_output_hashes_match": true,
+  "evaluation_count": 1,
+  "model_prediction_passes": 1,
+  "cached_second_invocation_no_prediction": true,
+  "raw_reload_validation": "artifact_reload_validation.json",
+  "pytest": "67 passed, 14 upstream Matplotlib/pyparsing deprecation warnings in 9.91s",
+  "ruff": "All checks passed",
+  "plots_visually_inspected": [
+    "confusion_matrix.png",
+    "explainability/shap_summary.png",
+    "explainability/shap_critical.png",
+    "explainability/shap_example_1.png",
+    "feature_importance.png"
+  ]
+}

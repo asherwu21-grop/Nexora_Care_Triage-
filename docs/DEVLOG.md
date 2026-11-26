@@ -352,3 +352,56 @@
   than training-resampling stability; illustrative decision costs requiring independent
   domain review. Experimental output is not a clinical decision. Final test evaluation
   remains deferred.
+
+
+## 2026-11-25 — Final frozen model, one-time test evaluation and explanations
+
+- Read AGENTS.md. Selected `default_LightGBM_class_weights` from the latest recorded validation
+  session before test exposure. Used the existing top development rank, balancing
+  High/Critical recall, under/severe/over-triage, macro F1, Brier and stability. The
+  cost-sensitive logistic alternative trades lower under-triage for higher over-triage
+  and lower macro F1. Kept the chosen uncalibrated argmax policy fixed.
+- Refit train plus validation (11,545 requests), with purged and test requests
+  excluded. Patient/time split and raw-feature parity checks passed. Saved model
+  version `triage-lightgbm-v1-01dd07c4b659` and both requested joblib artifacts in models/
+  (Git ignored). Feature schema includes raw inputs, mapping, configuration and
+  required prior-history context; post-snapshot requests require explicit context.
+- Added src/inference.py, src/finalize_model.py and src/validate_artifacts.py;
+  extended src/data_preprocessing.py and src/evaluate.py; implemented
+  src/explainability.py and tests/test_final_model.py. Updated README and this log.
+  Raw inference preserves unknown-vs-none multi-value handling and supports entirely
+  missing duration without inventing observed unit verification.
+- The final ledger and immutable probability cache record exactly one model prediction
+  pass and one evaluation. A second invocation returned cached results without model
+  loading, prediction or metric recomputation. Fault-injection tests cover safe export
+  recovery. Actual final test requests: 1,074.
+- Test results read from artifacts/model_metrics.json: accuracy 0.699255,
+  balanced accuracy 0.706441, macro/weighted F1
+  0.699669/0.696683, High/Critical recall
+  0.684211/0.744186, multiclass Brier
+  0.418385, log loss 0.697541.
+  Under-triage 166 (15.456238%), over-triage
+  157 (14.618250%), severe under-triage
+  9 (0.837989% overall).
+  Severe breakdown: {"Critical_to_Low": 0, "Critical_to_Moderate": 3, "High_to_Low": 6}.
+- Wrote requested metrics JSON, classification CSV, confusion matrix PNG, triage-error
+  CSV, and model_predictions.csv with unique IDs, four probabilities, UTC timestamp,
+  version and safety notice. The non-clinical score is documented in code/schema/table
+  metadata as 100 * (P(Moderate) + 2P(High) + 3P(Critical)) / 3.
+- Saved native gain importance and global/per-class/individual SHAP artifacts using
+  development data only. Grouped red flags and comorbidities by summing signed SHAP
+  contributions before absolute aggregation; retained distinct blood pressures and
+  availability features. Severity, heart rate, red flags, oxygen saturation and pain
+  dominate grouped explanations. No prohibited transformed features appeared.
+  Label-construction circularity remains possible, particularly given the earlier
+  red-flag separation; importance does not establish clinical validity or causation.
+- Verified serialized raw prediction shape (1, 4), probabilities summing to one,
+  separate preprocessing parity, prediction-table IDs/formula, and all frozen model,
+  code and output hashes. Ruff passed; pytest: 67 passed, 14 upstream Matplotlib/
+  pyparsing deprecation warnings in 9.91s. Visually inspected confusion matrix and
+  representative SHAP plots. Reports are in artifacts/final_model_checks.json and
+  artifacts/artifact_reload_validation.json.
+- Open limitations: earlier full-cohort exploration limits holdout blinding;
+  probabilities are not validated clinical risk estimates; prior-history context
+  must be complete; source duration units and urgency label provenance remain
+  unconfirmed. Experimental output. Not a clinical decision.

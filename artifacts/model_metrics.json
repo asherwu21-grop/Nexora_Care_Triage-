@@ -1,0 +1,160 @@
+{
+  "evaluation_split": "test",
+  "n_evaluated": 1074,
+  "urgency_order": [
+    "Low",
+    "Moderate",
+    "High",
+    "Critical"
+  ],
+  "accuracy": 0.6992551210428305,
+  "balanced_accuracy": 0.7064412484700122,
+  "macro_f1": 0.6996691414570103,
+  "weighted_f1": 0.6966830306087333,
+  "classification_report": {
+    "Low": {
+      "precision": 0.7469586374695864,
+      "recall": 0.8078947368421052,
+      "f1-score": 0.7762326169405815,
+      "support": 380.0
+    },
+    "Moderate": {
+      "precision": 0.6627218934911243,
+      "recall": 0.5894736842105263,
+      "f1-score": 0.6239554317548747,
+      "support": 380.0
+    },
+    "High": {
+      "precision": 0.6666666666666666,
+      "recall": 0.6842105263157895,
+      "f1-score": 0.6753246753246753,
+      "support": 228.0
+    },
+    "Critical": {
+      "precision": 0.7032967032967034,
+      "recall": 0.7441860465116279,
+      "f1-score": 0.7231638418079096,
+      "support": 86.0
+    },
+    "accuracy": 0.6992551210428305,
+    "macro avg": {
+      "precision": 0.6949109752310202,
+      "recall": 0.7064412484700122,
+      "f1-score": 0.6996691414570103,
+      "support": 1074.0
+    },
+    "weighted avg": {
+      "precision": 0.6966127730433767,
+      "recall": 0.6992551210428305,
+      "f1-score": 0.6966830306087333,
+      "support": 1074.0
+    }
+  },
+  "confusion_matrix": [
+    [
+      307,
+      71,
+      2,
+      0
+    ],
+    [
+      98,
+      224,
+      57,
+      1
+    ],
+    [
+      6,
+      40,
+      156,
+      26
+    ],
+    [
+      0,
+      3,
+      19,
+      64
+    ]
+  ],
+  "confusion_matrix_orientation": "Rows=true, columns=predicted, both in urgency_order",
+  "triage_errors": {
+    "n": 1074,
+    "correct_count": 751,
+    "under_triage_count": 166,
+    "under_triage_rate": 0.15456238361266295,
+    "over_triage_count": 157,
+    "over_triage_rate": 0.14618249534450653,
+    "severe_under_triage_count": 9,
+    "severe_under_triage_rate": 0.008379888268156424,
+    "severe_under_triage_breakdown": {
+      "Critical_to_Low": 0,
+      "Critical_to_Moderate": 3,
+      "High_to_Low": 6
+    },
+    "high_or_critical_support": 314,
+    "severe_under_triage_rate_among_high_or_critical": 0.028662420382165606,
+    "rate_denominators": {
+      "overall": "All evaluated requests",
+      "per_true_class": "Requests whose true label is the named class; null if absent",
+      "severe_among_high_or_critical": "Requests truly High or Critical; null if absent"
+    },
+    "per_true_class": {
+      "Low": {
+        "support": 380,
+        "under_triage_count": 0,
+        "under_triage_rate": 0.0,
+        "over_triage_count": 73,
+        "over_triage_rate": 0.19210526315789472,
+        "severe_under_triage_count": 0,
+        "severe_under_triage_rate": 0.0
+      },
+      "Moderate": {
+        "support": 380,
+        "under_triage_count": 98,
+        "under_triage_rate": 0.2578947368421053,
+        "over_triage_count": 58,
+        "over_triage_rate": 0.15263157894736842,
+        "severe_under_triage_count": 0,
+        "severe_under_triage_rate": 0.0
+      },
+      "High": {
+        "support": 228,
+        "under_triage_count": 46,
+        "under_triage_rate": 0.20175438596491227,
+        "over_triage_count": 26,
+        "over_triage_rate": 0.11403508771929824,
+        "severe_under_triage_count": 6,
+        "severe_under_triage_rate": 0.02631578947368421
+      },
+      "Critical": {
+        "support": 86,
+        "under_triage_count": 22,
+        "under_triage_rate": 0.2558139534883721,
+        "over_triage_count": 0,
+        "over_triage_rate": 0.0,
+        "severe_under_triage_count": 3,
+        "severe_under_triage_rate": 0.03488372093023256
+      }
+    }
+  },
+  "metric_conventions": "All four labels in F1/report/confusion matrix; undefined precision/recall/F1=0. Balanced accuracy averages recall over present true classes. No class weights applied to evaluation metrics.",
+  "safety_notice": "Experimental output. Not a clinical decision.",
+  "brier_multiclass": 0.4183851458587578,
+  "brier_mean_ovr": 0.10459628646468945,
+  "brier_per_class": {
+    "Low": 0.115182349482756,
+    "Moderate": 0.17246890339499135,
+    "High": 0.09667791601263544,
+    "Critical": 0.03405597696837501
+  },
+  "log_loss": 0.6975405229219434,
+  "model_version": "triage-lightgbm-v1-01dd07c4b659",
+  "selected_run_id": "default_LightGBM_class_weights",
+  "final_test_evaluation": true,
+  "evaluation_count": 1,
+  "n_fit": 11545,
+  "fit_scope": "train_plus_validation",
+  "high_recall": 0.6842105263157895,
+  "critical_recall": 0.7441860465116279,
+  "limitations": "Configuration fixed using development validation before this final test pass. Earlier whole-cohort EDA/hypothesis analyses mean the holdout was not fully blinded to prior exploration. Probabilities and ranking index are non-clinical. No model reselection or threshold changes follow these test outcomes."
+}
