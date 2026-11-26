@@ -454,3 +454,42 @@
   manually confirmed history, not an integrated patient-history system. Existing
   label-provenance, inferred-unit and earlier exploratory-exposure limitations
   remain visible. Upstream Matplotlib/pyparsing warnings remain.
+
+
+## 2026-11-25 — Artifact-generated README and final project report
+
+- Read AGENTS.md and the user-supplied case-study DOCX under docs/. Preserved
+  the original DOCX without moving or editing it; extracted its exact success
+  criteria, deliverables and text into artifacts/case_study_reference.json with
+  source fingerprint. Used the documents skill for read-only source inspection.
+- Rewrote README.md and created docs/project_report.md covering business context,
+  actual preparation issues, EDA, hypotheses, methodology, comparisons, calibration,
+  final evaluation, triage errors, SHAP, dashboard guide, limitations and safety.
+  Added docs/templates/README.md.tmpl, docs/templates/project_report.md.tmpl and
+  src/reporting.py. Normal generation reads quantitative inputs exclusively from
+  saved artifacts and never fits, predicts or reevaluates the test cohort.
+- artifacts/documentation_facts.json records input/template/generator/output hashes
+  and the rendered context. Every measured result and derived summary table comes
+  from those saved inputs; criteria text is extracted from the DOCX snapshot.
+  Added --check for stale generated output and --extract-case-study for explicitly
+  refreshing the source requirements snapshot.
+- Mapped all 18 exact success criteria to files/pages,
+  marking partially satisfied or locally validated deliverables. Explicit gaps:
+  holdout not fully blinded after earlier EDA/hypotheses; dashboard omission of
+  omnibus statistics; categorical rather than proposed ordinal severity test;
+  missing free-text symptom EDA and suggested final-evaluation notebook; model
+  binaries distributed separately. Production/live integration is out of scope;
+  clinical validation is not met. No unsupported clinical metric target invented.
+- Protocol heterogeneity is documented using profile frequencies; potential label
+  noise is unquantified. Synthetic/limited-data concerns are distinguished from
+  verified source provenance, which is not certified by the supplied artifacts.
+- Added tests/test_reporting.py for generated-output/criterion/link consistency,
+  artifact-driven accuracy changes, inconsistent-support rejection and the absence
+  of literal numerical measurements in templates. Full suite: 88 passed, 14 warnings in 13.10s.
+  Documentation tests: 4 passed; Ruff clean;
+  generated-file check and git diff whitespace check passed. Existing upstream
+  Matplotlib/pyparsing warnings remain. Evidence: artifacts/documentation_checks.json.
+- Verified the original DOCX, frozen model/schema/source fingerprints and final
+  test exports remain unchanged. Ledger still records
+  1 model prediction pass and
+  1 evaluation. No new empirical results generated.

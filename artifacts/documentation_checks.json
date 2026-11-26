@@ -1,0 +1,43 @@
+{
+  "status": "passed",
+  "verified_at": "2026-11-26T02:08:42.297022+00:00",
+  "pytest": {
+    "command": "pytest -q",
+    "result": "88 passed, 14 warnings in 13.10s",
+    "exit_code": 0
+  },
+  "documentation_pytest": {
+    "command": "pytest tests/test_reporting.py -q",
+    "result": "4 passed",
+    "exit_code": 0
+  },
+  "ruff": {
+    "command": "ruff check .",
+    "result": "All checks passed!",
+    "exit_code": 0
+  },
+  "generated_output_check": {
+    "command": "python -m src.reporting --check",
+    "result": "passed"
+  },
+  "criteria_count": 18,
+  "source_artifact_count": 21,
+  "original_docx_unchanged": true,
+  "frozen_model_schema_sources_and_test_exports_unchanged": true,
+  "test_evaluation_count": 1,
+  "test_prediction_passes": 1,
+  "method": "Template substitution from artifact-only quantitative inputs; exact DOCX criteria extracted to artifact snapshot",
+  "manual_review": [
+    "All requested sections present",
+    "Checklist uses exact source success sentences",
+    "Underflow and sparse tests explicitly described",
+    "Protocol-related label noise unquantified",
+    "Partial/unmet criteria and detail deviations named",
+    "No clinical performance threshold invented",
+    "Relative links resolve; separate model distribution documented"
+  ],
+  "output_sha256": {
+    "README.md": "e20e161f61c02c51dad828037db3bfd07fa57b7680b844605470504d36e5b022",
+    "docs/project_report.md": "c0a1da633c695710a6cd24cf0e48192a7e13f6314d4624d055ade313b91ec6f4"
+  }
+}
