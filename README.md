@@ -7,7 +7,7 @@ Experimental decision support for estimating telemedicine request urgency.
 Data ingestion, profiling, cleaning, integration, deterministic feature engineering,
 exploratory analysis, statistical hypothesis tests, baseline training, model experiments,
 calibration, final test evaluation, raw-input inference, and SHAP explanations are implemented.
-Dashboard views are not implemented.
+The Streamlit dashboard includes an overview and six analysis/prediction pages.
 
 ## Setup
 
@@ -24,8 +24,8 @@ python -m src.train
 streamlit run dashboard/app.py
 ```
 
-The dashboard entry point is empty. Tests use synthetic fixtures and also check the
-real dataset when local raw CSVs are available.
+Dashboard AppTest smoke tests cover every page and interactive prediction safety.
+Workflow tests use synthetic fixtures and also check local datasets/artifacts when available.
 
 ## Layout
 
@@ -36,9 +36,9 @@ notebooks/         Exploratory notebooks; import logic from src/
 src/               Importable workflow modules and shared configuration
 models/            Saved models (*.joblib ignored by Git)
 artifacts/         Generated reports, metrics, and figures
-dashboard/app.py   Streamlit entry point
-dashboard/pages/   Dashboard views
-dashboard/utils/   Dashboard package scaffolding; workflow logic lives in src/
+dashboard/app.py   Project overview and Streamlit entry point
+dashboard/pages/   Numbered EDA, hypotheses, evaluation, errors, SHAP, prediction views
+dashboard/utils/   Cached artifact/model loaders and shared Plotly helpers
 tests/             Automated workflow and artifact validation tests
 docs/DEVLOG.md     Development record
 ```
@@ -249,3 +249,50 @@ pain and red flags may reflect label construction; the earlier red-flag separati
 and unknown label provenance require independent review. Earlier whole-cohort EDA
 also means the test cohort was not fully blinded. See `final_model_checks.json` for
 verification and `model_metrics.json` for the actual final results.
+
+
+## Dashboard
+
+Launch `streamlit run dashboard/app.py` from the repository root. The entrypoints
+bootstrap the repository import path, so an editable package install is unnecessary.
+`.streamlit/config.toml` provides a light theme and explicit overview/numbered sidebar
+links. Pages import renderers from `src/dashboard_views.py`; deterministic filters,
+error-review flags, raw demo validation and prediction logic live in
+`src/dashboard_logic.py`.
+
+- **Project Overview:** profiled intake/patient/assessment totals, unlabelled count,
+  recorded urgency distribution and saved final-test headline metrics.
+- **01 Exploratory Analysis:** sidebar urgency, sex, complaint and age filters;
+  demographic/symptom/vital distributions, multi-value frequencies, missingness
+  tables and numeric correlations. Empty selections show a helpful message.
+- **02 Hypothesis Testing:** adjusted significant/non-significant labels, effect
+  sizes and interpretations, assumptions/exclusions, post-hoc contrasts, patient
+  sensitivity and descriptive numeric box/violin plots. Plots explicitly identify
+  their full labelled cohort independently of the selected statistical sample.
+- **03 Model Evaluation:** saved test metrics, classification report, confusion
+  matrix, split counts and limitations. The dashboard does not rerun final evaluation.
+- **04 Error Analysis:** saved under/over/severe errors and a broader priority review
+  group: Critical to any lower class, and High to Low/Moderate. This is clearly
+  distinguished from the project's narrower severe-under-triage definition.
+- **05 Explainability:** grouped gain/SHAP, class-specific plots and development
+  examples, with label-provenance and non-causal interpretation caveats.
+- **06 Prediction Demo:** fictitious raw intake, optional blank measurements,
+  explicit unknown/none responses, confirmed prior-request count, saved-pipeline
+  probabilities and non-clinical ranking index. Invalid values block inference.
+  Selected red flags immediately show escalation messaging independently of form
+  submission, model availability or output. The exact experimental disclaimer
+  appears throughout the app and alongside predictions.
+
+Every dashboard file read goes through `dashboard/utils/data_loader.py`:
+`st.cache_data` for prepared CSV/JSON/text/images and `st.cache_resource` for the
+trusted local model. Cache keys include file identity, modification time and size.
+Model and schema fingerprints are checked against the saved manifest before
+loading. No raw CSVs are accessed; missing resources display recovery guidance.
+The dashboard writes no intake values or demo predictions. Saved model binaries
+are Git ignored: restore the compatible model bundle before using the demo.
+
+Run `pytest -q tests/test_dashboard.py` for page smoke tests, filter branches,
+safety messaging, invalid input, missing artifacts and real saved-model reload
+when the local binary is present. Verification is recorded in
+`artifacts/dashboard_checks.json`; representative browser screenshots are stored
+alongside it. The app is an experimental research interface, not a clinical workflow.

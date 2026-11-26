@@ -1,0 +1,60 @@
+{
+  "status": "passed",
+  "verified_at": "2026-11-26T01:54:27.698437+00:00",
+  "pages": [
+    "Project Overview",
+    "Exploratory Analysis",
+    "Hypothesis Testing",
+    "Model Evaluation",
+    "Under/Over-Triage Error Analysis",
+    "Explainability",
+    "Prediction Demo"
+  ],
+  "page_smoke_tests": 7,
+  "dashboard_tests": "17 passed, 13 upstream deprecation warnings in 4.46s",
+  "full_pytest": "84 passed, 14 upstream Matplotlib/pyparsing deprecation warnings in 12.57s",
+  "ruff": "All checks passed!",
+  "verified_scenarios": [
+    "all pages render via file-based page navigation",
+    "empty urgency filters",
+    "all exploratory selector branches",
+    "adjusted non-significant hypothesis filter",
+    "one-request-per-patient sensitivity cohort",
+    "mock lower prediction with selected red flag",
+    "immediate escalation before submit/model load",
+    "model unavailable with red flags",
+    "invalid inputs block model load",
+    "missing artifact recovery messages",
+    "actual saved-pipeline fictitious request",
+    "blank vitals and unknown-vs-none preserved",
+    "future birth date, impossible vitals and negative duration",
+    "broader safety focus distinct from severe definition",
+    "path confinement and changed-file cache invalidation"
+  ],
+  "browser_verified": [
+    "documented streamlit run command starts and imports src",
+    "overview title, metrics and Plotly chart render",
+    "explicit overview/six-page navigation",
+    "prediction red-flag escalation visible before submission"
+  ],
+  "model_version": "triage-lightgbm-v1-01dd07c4b659",
+  "frozen_model_schema_source_and_metric_hashes_unchanged": true,
+  "final_test_evaluation_count": 1,
+  "final_test_model_prediction_passes": 1,
+  "safety_review_counts": {
+    "broader_priority_focus": 68,
+    "severe_under_triage": 9
+  },
+  "dashboard_sources": [
+    "dashboard/utils/data_loader.py",
+    "src/dashboard_logic.py",
+    "src/dashboard_views.py",
+    "tests/test_dashboard.py"
+  ],
+  "limitations": [
+    "Local Git-ignored model bundle required for live demo; handled gracefully if absent",
+    "Upstream deprecation warnings remain; no test failures",
+    "SHAP and statistical caveats retain their saved cohort scope; no causal interpretation",
+    "Prediction demo uses confirmed manual history context for fictitious patients only"
+  ]
+}

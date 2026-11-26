@@ -1,0 +1,9 @@
+[client]
+showSidebarNavigation = false
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "light"
+primaryColor = "#23866c"

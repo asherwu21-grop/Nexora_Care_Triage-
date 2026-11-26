@@ -10,3 +10,6 @@ __pycache__/
 htmlcov/
 .DS_Store
 .env
+
+# Local browser verification traces
+.playwright-mcp/

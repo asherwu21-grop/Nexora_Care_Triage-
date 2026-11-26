@@ -405,3 +405,52 @@
   probabilities are not validated clinical risk estimates; prior-history context
   must be complete; source duration units and urgency label provenance remain
   unconfirmed. Experimental output. Not a clinical decision.
+
+
+## 2026-11-25 — Streamlit overview, six pages and prediction safety
+
+- Read AGENTS.md. Built dashboard/app.py Project Overview and pages 01–06:
+  exploratory analysis, hypothesis testing, model evaluation, error analysis,
+  explainability and raw-input prediction demo. Shared presentation lives in
+  src/dashboard_views.py; filter, error-review and demo validation logic lives in
+  src/dashboard_logic.py. Added dashboard/utils/data_loader.py,
+  tests/test_dashboard.py and .streamlit/config.toml; updated README and .gitignore.
+  Removed empty dashboard/pages/__init__.py because Streamlit exposed it as an
+  unintended extra page. Browser trace files are ignored; verification artifacts
+  and screenshots are saved under artifacts/.
+- All disk reads use the cached loader: cache_data for prepared/artifact files,
+  cache_resource for the trusted saved model, cache invalidation via file stamps,
+  model/schema hash verification. No raw CSV reads, fitting or test reevaluation.
+  Metrics are loaded from saved files; no invented dashboard performance figures.
+- Overview reads 15,085 intake requests,
+  9,912 unique patients and
+  14,809 assessments from the existing profile.
+  EDA filters urgency, sex, complaint and age, preserves missingness and handles
+  empty selections. Hypothesis views use saved adjusted decisions, effects,
+  assumptions, post-hoc tables and patient sensitivity; box/violin plots explicitly
+  label their descriptive full-cohort scope. Model and SHAP views retain provenance
+  and label-construction caveats.
+- Error analysis joins saved predictions to prepared labels without inference.
+  Broader requested priority focus (Critical to any lower class or High to
+  Low/Moderate): 68 saved test requests. Narrower
+  project severe definition (Critical to Low/Moderate or High to Low):
+  9. Definitions are shown separately.
+- Prediction form builds a raw-format fictitious request with confirmed strictly
+  prior history context. Hours convert to inferred seconds; blank values remain
+  missing and unknown remains distinct from explicit none. Invalid measurements,
+  dates and history block inference. The saved pipeline runs only on form submit.
+  Red flags are outside the form and trigger escalation immediately, even with
+  missing models or a lower predicted class. Every page and prediction shows
+  'Experimental output. Not a clinical decision.' Demo inputs/results are not saved.
+- AppTest: 17 passed, 13 upstream deprecation warnings in 4.46s. Full pytest:
+  84 passed, 14 upstream Matplotlib/pyparsing deprecation warnings in 12.57s. Ruff: All checks passed! Browser verification
+  caught a root-command import-path issue that AppTest did not reveal; fixed
+  entrypoint bootstrapping and confirmed actual browser startup/navigation.
+  Existing frozen model/schema/source/output hashes match, and the final-test
+  ledger remains at one prediction pass and one evaluation. Evidence is in
+  artifacts/dashboard_checks.json and representative browser screenshots.
+- Open issues/limits: local model binaries are Git ignored and must be restored
+  for the live demo; missing resources show guidance. The demo uses fictitious
+  manually confirmed history, not an integrated patient-history system. Existing
+  label-provenance, inferred-unit and earlier exploratory-exposure limitations
+  remain visible. Upstream Matplotlib/pyparsing warnings remain.
